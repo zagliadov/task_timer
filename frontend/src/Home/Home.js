@@ -1,5 +1,6 @@
 import React from 'react';
-import classes from './home.module.sass';
+
+
 
 const Home = () => {
     return (

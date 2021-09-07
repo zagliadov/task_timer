@@ -1,12 +1,15 @@
 import React from 'react';
 import classes from './signup.module.sass';
 import { useForm } from "react-hook-form";
+import { useDispatch } from 'react-redux';
+import { registration } from '../../features/Auth/userSlice';
 
 const SignUp = () => {
 
-    const { register, handleSubmit, reset } = useForm();
+    const dispatch = useDispatch();
+    const { register, handleSubmit } = useForm();
     const onSubmit = data => {
-        console.log(data)
+        dispatch(registration(data))
     };
 
 
@@ -28,7 +31,7 @@ const SignUp = () => {
                     <label>Email: </label>
                     <input type='text' {...register("email", { required: true })} />
                 </section>
-                
+
                 <section className={classes.input__wrapper}>
                     <label>Password: </label>
                     <input type='text' {...register("password", { required: true })} />
@@ -36,7 +39,7 @@ const SignUp = () => {
                 <section className={classes.input__wrapper_submit}>
                     <input type='submit' />
                 </section>
-                
+
             </form>
         </section>
 
