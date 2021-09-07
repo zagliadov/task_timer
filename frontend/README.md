@@ -1,7 +1,7 @@
 
-Распределение маршрутов в Main
-Аутентификация в Auth
-State в features
+Распределение маршрутов в Main,
+Аутентификация в Auth,
+State в features,
  * -src
  *  --App
  *   ---App.js
