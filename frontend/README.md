@@ -1,8 +1,14 @@
 
+<<<<<<< HEAD
 Распределение маршрутов в Main
 Аутентификация в Auth
 State в features
 
+=======
+Распределение маршрутов в Main,
+Аутентификация в Auth,
+State в features,
+>>>>>>> 7cc9537f80503ffc80ab980319266fc8369c5e84
  * -src
  *  --App
  *   ---App.js
