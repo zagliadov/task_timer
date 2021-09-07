@@ -1,0 +1,36 @@
+version: '3'
+services:
+  timerFrontend:
+    image: node:latest
+    container_name: timerFrontend
+    working_dir: /app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - timerBackend
+      - timerDB
+    command: npm start
+    volumes:
+      - ./frontend:/app
+  timerBackend:
+    image: node:latest
+    container_name: timerBackend
+    ports:
+      - '9001:9001'
+    depends_on:
+      - timerDB
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    command: npm run start:dev
+    
+  timerDB:
+    image: postgres:latest
+    environment: 
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=timerDB
+    ports:
+      - "5432:5432" 
+    volumes: 
+      - ./data/database-data:/var/lib/postgresql/data/
