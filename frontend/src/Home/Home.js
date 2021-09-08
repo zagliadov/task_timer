@@ -5,11 +5,11 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { transformTime } from '../features/utils/utils';
-import { getDataPackage } from '../features/Timer/timerSlice';
+import { getDataPackage, saveTaskPackage } from '../features/Timer/timerSlice';
 
 const Home = () => {
     const user = useSelector(state => state.user.user);
-    const taskPackage = useSelector(state => state.timer.package)
+    //const taskPackage = useSelector(state => state.timer.package)
     const dispatch = useDispatch();
     const [start, setStart] = useState(false);
     let memo = useRef('');
@@ -17,19 +17,18 @@ const Home = () => {
     let [seconds, setSeconds] = useState(0);
     let [minutes, setMinutes] = useState(0);
     let [hours, setHours] = useState(0);
-    let m = moment();
     let mydate = moment().format()
     let weekDayName = moment(mydate).format('dddd');
     let date = new Date();
     let day = transformTime(date.getDate())
     let month = moment().format('MMMM');
 
+
     const timer = useRef(null);
-
-
     let tick = () => {
+        //Запускает и оставнавливает счетчик
         if (!timer.current) {
-            timer.current = setInterval(() => setSeconds(seconds => seconds + 1), 10)
+            timer.current = setInterval(() => setSeconds(seconds => seconds + 1), 1)
         } else {
             clearInterval(timer.current);
             timer.current = null
@@ -37,6 +36,7 @@ const Home = () => {
     }
 
     let timeFrameControl = (seconds, minutes, hours) => {
+        //Ф. не дает выйти за рамки 60 секунд, минут, часов
         if (seconds > 60) {
             setSeconds(0)
             setMinutes(minutes => minutes + 1)
@@ -60,6 +60,7 @@ const Home = () => {
     }
 
     let getTime = (h, m, s) => {
+        //Собирает значения полей времени в обьект
         timeStamp = {
             hours: h,
             minutes: m,
@@ -67,26 +68,33 @@ const Home = () => {
         }
     }
 
-    useEffect(() => {
-        
-        localStorage.setItem('taskPackage', JSON.stringify(taskPackage))
-    }, [taskPackage])
-
-
-
+    // useEffect(() => {
+    //     localStorage.setItem('taskPackage', JSON.stringify(taskPackage))
+    // }, [taskPackage])
+   
 
     const handlePlay = () => {
-        if (memo.current.value.split(' ')[0].length === 0) return
+        /**
+         * Не дает включить счетчик если memo не заполнен
+         * Следит за memo в инпуте и сравнивает с мемо в локальном хранилище
+         * и если они идентичны продолжаешь считать время, если нет сбрасывает время
+         * и пишет новое memo
+         */
+       // if (memo.current.value.split(' ')[0].length === 0) return
+        if (memo.current.value.length === 0) return
         setStart(true)
         tick()
-
+        if(memo.current.value !== localStorage.getItem('memo')) {
+            localStorage.setItem('memo', memo.current.value)
+            resetTimer()
+        }
+        
     }
     const resetTimer = () => {
         setSeconds(0);
         setMinutes(0);
         setHours(0);
-        memo.current.value = '';
-        //timeStamp.memo = '';
+        //memo.current.value = '';
     }
 
 
@@ -94,13 +102,20 @@ const Home = () => {
         tick();
         setStart(false);
         getTime(hours, minutes, seconds)
-        timeStamp.memo = memo.current.value.split(' ')
+        //timeStamp.memo = memo.current.value.split(' ')
+        timeStamp.memo = memo.current.value
         localStorage.setItem('timeStamp', JSON.stringify(timeStamp))
         // if(timeStamp.length === undefined) return
-        dispatch(getDataPackage(timeStamp))
+       
+        let id = user.id
+        dispatch(saveTaskPackage({timeStamp, id}))
 
-        resetTimer()
+
+        //resetTimer()
     }
+
+    
+
 
     return (
         <div>

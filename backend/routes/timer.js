@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    getTimer
+    saveTaskPackage
 } = require('../controllers/timer');
 
 
 
 
-router.route('/')
-    .get(getTimer);
+router.route('/add_task')
+    .post(saveTaskPackage);
 
 
 
