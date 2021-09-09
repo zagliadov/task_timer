@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     minutes: DataTypes.STRING,
     seconds: DataTypes.STRING,
     memo: DataTypes.STRING,
-    userId: DataTypes.INTEGER
+    userId: DataTypes.INTEGER,
+    picture: DataTypes.ARRAY(DataTypes.STRING)
   }, {
     sequelize,
     modelName: 'Task',

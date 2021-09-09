@@ -7,6 +7,8 @@ module.exports = {
       minutes: '20',
       seconds: '25',
       memo: 'Redux',
+      userId: '4',
+      picture: [''],
       createdAt: new Date(),
       updatedAt: new Date()
     }]);

@@ -7,7 +7,8 @@ export const saveTaskPackage = createAsyncThunk(
   'user/saveTaskPackage',
   async (data) => {
     let newDate = new Date();
-    data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime(newDate.getMonth().toString())}-${transformTime(newDate.getDate().toString())}`
+    let time = `${transformTime(newDate.getHours())}:${transformTime(newDate.getMinutes())}:${transformTime(newDate.getSeconds())}`;
+    data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime((newDate.getMonth()+1).toString())}-${transformTime(newDate.getDate().toString())} ${time}`
     try {
       return await axios.post(`http://0.0.0.0:9001/api/timer/add_task`, data)
         .then(response => response.data)
