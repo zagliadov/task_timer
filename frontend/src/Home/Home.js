@@ -5,7 +5,9 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { transformTime } from '../features/utils/utils';
-import { getDataPackage, saveTaskPackage } from '../features/Timer/timerSlice';
+import { saveTaskPackage } from '../features/Timer/timerSlice';
+import Options from './components/Options/Options';
+
 
 const Home = () => {
     const user = useSelector(state => state.user.user);
@@ -71,7 +73,7 @@ const Home = () => {
     // useEffect(() => {
     //     localStorage.setItem('taskPackage', JSON.stringify(taskPackage))
     // }, [taskPackage])
-   
+
 
     const handlePlay = () => {
         /**
@@ -80,15 +82,15 @@ const Home = () => {
          * и если они идентичны продолжаешь считать время, если нет сбрасывает время
          * и пишет новое memo
          */
-       // if (memo.current.value.split(' ')[0].length === 0) return
+        // if (memo.current.value.split(' ')[0].length === 0) return
         if (memo.current.value.length === 0) return
         setStart(true)
         tick()
-        if(memo.current.value !== localStorage.getItem('memo')) {
+        if (memo.current.value !== localStorage.getItem('memo')) {
             localStorage.setItem('memo', memo.current.value)
             resetTimer()
         }
-        
+
     }
     const resetTimer = () => {
         setSeconds(0);
@@ -106,21 +108,20 @@ const Home = () => {
         timeStamp.memo = memo.current.value
         localStorage.setItem('timeStamp', JSON.stringify(timeStamp))
         // if(timeStamp.length === undefined) return
-       
+
         let id = user.id
-        dispatch(saveTaskPackage({timeStamp, id}))
+        dispatch(saveTaskPackage({ timeStamp, id }))
 
 
         //resetTimer()
     }
 
-    
+
 
 
     return (
-        <div>
+        <div className={classes.root}>
             {user ? <h2>{weekDayName} {day}, {month}</h2> : <p>Hello</p>}
-
             {user &&
                 <div className={classes.form_wrapper}>
                     <div className={classes.timer_wrapper}>
@@ -165,13 +166,16 @@ const Home = () => {
                     </div>
                     <input type='text' ref={memo} />
                 </div>
+
             }
 
+            <Options />
 
+
+            
         </div>
     );
 };
 
 export default Home;
 
-// {/* {(second < 10) ? '0' + second : second} */}

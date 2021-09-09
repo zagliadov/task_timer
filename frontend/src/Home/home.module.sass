@@ -1,11 +1,21 @@
+
+.root
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    width: 100%
+    box-sizing: border-box
+    
 .timer_wrapper
     display: flex
     align-items: center
     justify-content: space-around
-    width: 450px
+    width: 100%
     height: 120px
     border: 1px solid #20a06f
     border-radius: 15px
+    box-sizing: border-box
 
 .timer_hours, .timer_minutes, .timer_seconds
     display: flex
@@ -14,12 +24,11 @@
     align-items: center
     height: 100%
     span:nth-child(1)
-        font-weight: 900
         font-size: 4rem
         color: #20a06f
     span:nth-child(2)
         color: #9b9a9a
-        font-weight: 400
+        font-weight: 900
 
 .divider
     display: flex

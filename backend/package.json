@@ -21,6 +21,7 @@
     "nodemon": "^2.0.12",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
+    "screenshot-desktop": "^1.12.7",
     "sequelize": "^6.6.5"
   },
   "devDependencies": {

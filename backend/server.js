@@ -13,9 +13,6 @@ app.use('/api/timer', require('./routes/timer.js'));
 app.use('/api/auth' , require('./routes/auth.js'));
 
 
-
-
-
 sequelize.sync().then(() => {
     app.listen(PORT, async (req, res) => {
         console.log(`Server run on ${PORT}`)
