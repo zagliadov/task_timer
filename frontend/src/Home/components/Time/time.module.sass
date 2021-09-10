@@ -1,3 +1,5 @@
+@import '../../../colors/colors.module.sass';  
+    
 .clock_wrapper
     display: flex
     justify-content: center
@@ -7,14 +9,14 @@
 
 .clock
     border-radius: 60px
-    border: 3px solid #20a06f
+    border: 3px solid $dominantColor
     height: 80px
     width: 80px
     position: relative
     &::after
         content: ''
         position: absolute
-        background-color: #20a06f
+        background-color: $dominantColor
         height: 38px
         width: 4px
         border-radius: 5px
@@ -25,7 +27,7 @@
     &:before
         content: ''
         position: absolute
-        background-color: #20a06f
+        background-color: $dominantColor
         top: 6px
         left: 48%
         height: 35px
@@ -52,7 +54,7 @@
         position: absolute
         font-weight: bold
         font-size: 24px
-        color: #20a06f
+        color: $dominantColor
     span:nth-child(1)
         top: -28px
         left: 30px

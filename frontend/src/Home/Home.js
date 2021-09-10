@@ -7,13 +7,15 @@ import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { transformTime } from '../features/utils/utils';
 import { saveTaskPackage } from '../features/Timer/timerSlice';
 import Options from './components/Options/Options';
-
+import Error from '../Error/Error';
 
 const Home = () => {
     const user = useSelector(state => state.user.user);
     //const taskPackage = useSelector(state => state.timer.package)
     const dispatch = useDispatch();
-    const [start, setStart] = useState(false);
+    const [start, setStart] = useState(false); // Отображение кнопки play pause
+    const [noMemo, setNoMemo] = useState(false);
+    let [click, setClick] = useState(0); // Сколько раз пользователь нажал плей без указания memo
     let memo = useRef('');
     let timeStamp = {};
     let [seconds, setSeconds] = useState(0);
@@ -75,17 +77,23 @@ const Home = () => {
     // }, [taskPackage])
 
 
-    const handlePlay = () => {
+    const handlePlay = (e) => {
         /**
          * Не дает включить счетчик если memo не заполнен
          * Следит за memo в инпуте и сравнивает с мемо в локальном хранилище
          * и если они идентичны продолжаешь считать время, если нет сбрасывает время
          * и пишет новое memo
          */
-        // if (memo.current.value.split(' ')[0].length === 0) return
-        if (memo.current.value.length === 0) return
-        setStart(true)
-        tick()
+        setClick(++click)
+
+        if (memo.current.value.length === 0) setNoMemo(true)  // Показываем Error что не указан memo
+        if (memo.current.value.length > 0) {
+            setNoMemo(false)
+            setClick(0)
+        }  // Убираем Error если memo указан
+        if (memo.current.value.length === 0) return         // Если memo не указан не запускаем счетчик
+        setStart(true); // Отображение кнопки pause
+        tick();
         if (memo.current.value !== localStorage.getItem('memo')) {
             localStorage.setItem('memo', memo.current.value)
             resetTimer()
@@ -96,27 +104,18 @@ const Home = () => {
         setSeconds(0);
         setMinutes(0);
         setHours(0);
-        //memo.current.value = '';
     }
 
 
     const handlePause = () => {
         tick();
-        setStart(false);
+        setStart(false); // Отображение кнопки play
         getTime(hours, minutes, seconds)
-        //timeStamp.memo = memo.current.value.split(' ')
         timeStamp.memo = memo.current.value
         localStorage.setItem('timeStamp', JSON.stringify(timeStamp))
-        // if(timeStamp.length === undefined) return
-
         let id = user.id
         dispatch(saveTaskPackage({ timeStamp, id }))
-
-
-        //resetTimer()
     }
-
-
 
 
     return (
@@ -150,8 +149,8 @@ const Home = () => {
                             {!start ?
                                 <FontAwesomeIcon icon={faPlay}
                                     className={classes.timer_icons_play}
-                                    onClick={() => {
-                                        handlePlay()
+                                    onClick={(e) => {
+                                        handlePlay(e)
                                     }} />
                                 :
                                 <FontAwesomeIcon icon={faPause}
@@ -164,7 +163,16 @@ const Home = () => {
 
                         </section>
                     </div>
-                    <input type='text' ref={memo} />
+                    {noMemo && <Error message='You have not chosen a memo'
+                        click={click}
+                    />}
+
+
+                    <input type='text'
+                        className={
+                            (click > 1) ? classes.dificultCase : classes.inputMemo 
+                        }
+                        ref={memo} />
                 </div>
 
             }
@@ -172,7 +180,7 @@ const Home = () => {
             <Options />
 
 
-            
+
         </div>
     );
 };

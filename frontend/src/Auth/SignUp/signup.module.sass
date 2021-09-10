@@ -1,10 +1,13 @@
+@import '../../colors/colors.module.sass';
+
 
 .wrapper
     display: flex
     align-items: center
     padding-bottom: 20px
     flex-direction: column
-
+    h2
+        color: $dominantColor
 .signup
     display: flex
     flex-direction: column
@@ -18,11 +21,14 @@
         font-size: 24px
         border: none
         outline: none
-        box-shadow: 0px 1px 0px #8fc8ca8c
+        color: $dominantColor
+        box-shadow: 0px 1px 0px $inputAtRest
         &:hover
-            box-shadow: 0px 2px 0px #52a5a88c
+            box-shadow: 0px 2px 0px $inputAtRest
     label
         font-size: 24px
+        color: $dominantColor
+        font-weight: 900
         padding-right: 20px
 
 .input__wrapper_submit
@@ -33,8 +39,9 @@
         padding: 5px 50px
         border: none 
         border-radius: 5px
+        color: $buttonValue
         cursor: pointer
         font-size: 20px
-        background-color: #d4f5f68c
+        background-color: $buttonAtRest
         &:hover
-            background-color: #bef9fb8c
+            background-color: $buttonOnHover

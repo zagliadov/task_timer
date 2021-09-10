@@ -1,9 +1,13 @@
+@import '../../colors/colors.module.sass';
+
+
 .wrapper
     display: flex
     align-items: center
     padding-bottom: 20px
     flex-direction: column
-
+    h2
+        color: $dominantColor
 .signin
     display: flex
     flex-direction: column
@@ -16,13 +20,16 @@
     input
         font-size: 24px
         border: none
+        color: $dominantColor
         outline: none
-        box-shadow: 0px 1px 0px #8fc8ca8c
+        box-shadow: 0px 1px 0px $inputAtRest
         &:hover
-            box-shadow: 0px 2px 0px #52a5a88c
+            box-shadow: 0px 2px 0px $inputAtRest
     label
         font-size: 24px
         padding-right: 20px
+        font-weight: 600
+        color: $dominantColor
 
 .input__wrapper_submit
     display: flex
@@ -33,7 +40,8 @@
         border: none 
         border-radius: 5px
         cursor: pointer
+        color: $buttonValue
         font-size: 20px
-        background-color: #d4f5f68c
+        background-color: $buttonAtRest
         &:hover
-            background-color: #bef9fb8c
+            background-color: $buttonOnHover

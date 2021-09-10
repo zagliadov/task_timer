@@ -1,3 +1,5 @@
+@import '../../../colors/colors.module.sass';
+    
 .link
     text-decoration: none
     font-size: 20px
@@ -6,10 +8,10 @@
     padding-bottom: 5px
     padding-right: 5px
     padding-left: 10px
-    color: #20a06f
+    color: $linkAtRest
     border-bottom: 2px solid transparent
     transition: all 0.3s
     &:hover
-        color: #6abe9e
+        color: $linkOnHover
         transition: all 0.3s
-        border-bottom: 2px solid #6abe9e
+        border-bottom: 2px solid $linkOnHover
