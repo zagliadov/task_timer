@@ -28,12 +28,19 @@ const Home = () => {
     let day = transformTime(date.getDate())
     let month = moment().format('MMMM');
 
+    let tasks = useSelector(state => state.tasks.tasks)
+
+
+
+
 
     const timer = useRef(null);
+
     let tick = () => {
         //Запускает и оставнавливает счетчик
         if (!timer.current) {
-            timer.current = setInterval(() => setSeconds(seconds => seconds + 1), 1)
+            timer.current = setInterval(() => setSeconds(seconds => +seconds + 1), 1000)
+            
         } else {
             clearInterval(timer.current);
             timer.current = null
@@ -44,11 +51,11 @@ const Home = () => {
         //Ф. не дает выйти за рамки 60 секунд, минут, часов
         if (seconds > 60) {
             setSeconds(0)
-            setMinutes(minutes => minutes + 1)
+            setMinutes(minutes => +minutes + 1)
         }
         if (minutes > 60) {
             setMinutes(0)
-            setHours(hours => hours + 1)
+            setHours(hours => +hours + 1)
         }
         if (hours > 60) {
             setHours(0)
@@ -56,13 +63,10 @@ const Home = () => {
     }
 
     useEffect(() => {
-        timeFrameControl(seconds, minutes, hours)
+        timeFrameControl(+seconds, +minutes, +hours)
     }, [seconds, minutes, hours]);
-    
-    // useEffect(() => {
-    //     localStorage.removeItem('memo')
-    //     localStorage.removeItem('timeStamp')
-    // }, [])
+
+
 
     let zero = (item) => {
         if (item < 10) return '0' + item
@@ -77,6 +81,11 @@ const Home = () => {
             seconds: s,
         }
     }
+    const resetTimer = () => {
+        setSeconds(0);
+        setMinutes(0);
+        setHours(0);
+    }
 
     const handlePlay = (e) => {
         /**
@@ -86,7 +95,7 @@ const Home = () => {
          * и пишет новое memo
          */
         setClick(++click)
-
+        
         if (memo.current.value.length === 0) setNoMemo(true)  // Показываем Error что не указан memo
         if (memo.current.value.length > 0) {
             setNoMemo(false)
@@ -95,26 +104,19 @@ const Home = () => {
         if (memo.current.value.length === 0) return  // Если memo не указан не запускаем счетчик
         setStart(true); // Отображение кнопки pause
         tick();
+        
         if (memo.current.value !== localStorage.getItem('memo')) {
             setSaveData(true); // Делаем true если мемо не совпадает
-
-            // localStorage.removeItem('memo')
-            // localStorage.removeItem('timeStamp')
-            // setTimeout(() => {
-            //     localStorage.setItem('memo', memo.current.value)
-            // }, 1000)
-            localStorage.setItem('memo', memo.current.value)
-            resetTimer();
+        //    if(+minutes > 0 || +seconds > 0) return
+    
+             resetTimer();
             // Если memo поменялось делаем возможным новую запись в базу
         }
-    }
-    const resetTimer = () => {
-        setSeconds(0);
-        setMinutes(0);
-        setHours(0);
-    }
 
-
+        localStorage.setItem('memo', memo.current.value)
+        //dispatch(getMemo({ memo: localStorage.getItem('memo'), id: user.id }))
+    }
+    
 
     const handlePause = () => {
         tick();
@@ -123,31 +125,49 @@ const Home = () => {
         timeStamp.memo = memo.current.value
         localStorage.setItem('timeStamp', JSON.stringify(timeStamp))
 
-
-        console.log(saveData)
         //saveData по дефолту true
         if (!saveData) { //если false обновляем запись в базе
-            let time = JSON.parse(localStorage.getItem('timeStamp'));
-            return dispatch(updateTime({
-                hours: time.hours,
-                minutes: time.minutes,
-                seconds: time.seconds,
-                memo: localStorage.getItem('memo')
-            }))
- 
-        } else { // если saveData true делаем новую запись в базе/ saveData делаем false
+            let id = tasks.filter(task => {
+                return task.memo === memo.current.value
+            })
+            if (!id) return
+            if (id[0]?.memo === localStorage.getItem('memo')) {
+
+                let time = JSON.parse(localStorage.getItem('timeStamp'));
+                return dispatch(updateTime({
+                    hours: time.hours,
+                    minutes: time.minutes,
+                    seconds: time.seconds,
+                    memo: localStorage.getItem('memo'),
+                    usid: user.id,
+                    taskId: id[0].id,
+                }))
+            }
+
+        } else {
+            // если saveData true делаем новую запись в базе/ saveData делаем false
+            let id = tasks.filter(task => {
+                return task.memo === memo.current.value
+            })
+            if (!id) return
+            if (id[0]?.memo === localStorage.getItem('memo')) {
+
+                // setSaveData(false)
+                let time = JSON.parse(localStorage.getItem('timeStamp'));
+                console.log(id[0].hours)
+                return dispatch(updateTime({
+                    hours: time.hours,
+                    minutes: time.minutes ,
+                    seconds: time.seconds,
+                    memo: localStorage.getItem('memo'),
+                    usid: user.id,
+                    taskId: id[0].id,
+                }))
+            }
             dispatch(saveTaskPackage({ timeStamp, id: user.id })) //Запись в базу новых данных только через saveData(true)
             setSaveData(false)// Отключаем запись в базу, думая что задача не поменялась следущая задача обновить ту же запись в базе
         }
-
         //если true сохраняем новую запись
-
-
-
-
-
-
-
     }
 
 
@@ -205,12 +225,22 @@ const Home = () => {
                         className={
                             (click > 1) ? classes.dificultCase : classes.inputMemo
                         }
-                        ref={memo} />
+                        ref={memo} 
+                        onChange={() => {
+                            let id = tasks.filter(task => {
+                                return task.memo === memo.current.value
+                            })
+                            setHours(id[0]?.hours || 0)
+                            setMinutes(id[0]?.minutes || 0)
+                            setSeconds(id[0]?.seconds || 0)
+                            
+                            localStorage.setItem('memo', memo.current.value)
+                        }}/>
                 </div>
 
             }
 
-            <Options />
+            <Options start={start}/>
 
 
 

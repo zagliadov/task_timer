@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getTasks } from '../../../features/Tasks/tasksSlice';
 
 
-const SomeFunction = () => {
+const TaskTable = ({start}) => {
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.user);
@@ -14,6 +14,12 @@ const SomeFunction = () => {
         if(user.length === 0) return
         console.log(tasks)
     }, [user])
+
+   useEffect(() => {
+    dispatch(getTasks(user.id))
+
+   }, [start])
+
 
     return (
         <div>
@@ -30,4 +36,4 @@ const SomeFunction = () => {
     );
 };
 
-export default SomeFunction;
+export default TaskTable;

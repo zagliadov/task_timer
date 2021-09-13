@@ -6,7 +6,9 @@ import { Link, Switch, Route } from 'react-router-dom';
 import classes from './options.module.sass';
 
 
-const Options = () => {
+const Options = ({start}) => {
+
+    
     return (
         <section className={classes.options_wrapper}>
             <h2>Options</h2>
@@ -16,7 +18,7 @@ const Options = () => {
                 <Link to='/onemorefunction' className={classes.link} >One more function</Link>
             </menu>
 
-
+     
 
 
 
@@ -26,7 +28,7 @@ const Options = () => {
                     <Limitation />
                 </Route>
                 <Route path="/tasktable">
-                    <TaskTable />
+                    <TaskTable start={start}/>
                 </Route>
                 <Route path="/onemorefunction">
                     <OneMoreFunction />

@@ -3,7 +3,8 @@ const router = express.Router();
 
 const {
     saveTaskPackage,
-    updateTime
+    updateTime,
+    // getMemo
 } = require('../controllers/timer');
 
 
@@ -15,6 +16,8 @@ router.route('/add_task')
 router.route('/update_time')
     .put(updateTime);
 
+// router.route('/get_memo')
+//     .post(getMemo);
 
 
 module.exports = router;

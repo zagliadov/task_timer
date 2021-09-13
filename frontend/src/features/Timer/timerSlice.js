@@ -9,11 +9,10 @@ export const saveTaskPackage = createAsyncThunk(
     let newDate = new Date();
     let time = `${transformTime(newDate.getHours())}:${transformTime(newDate.getMinutes())}:${transformTime(newDate.getSeconds())}`;
     data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime((newDate.getMonth()+1).toString())}-${transformTime(newDate.getDate().toString())} ${time}`
-    console.log(data)
     try {
       return await axios.post(`http://0.0.0.0:9001/api/timer/add_task`, data)
         .then(response => response.data)
-        .then(data => console.log(data))
+        
 
     } catch (error) {
       console.log(error.message)
@@ -21,17 +20,33 @@ export const saveTaskPackage = createAsyncThunk(
   }
 );
 
+
+// export const getMemo = createAsyncThunk(
+//   'user/getMemo',
+//   async (data) => {
+
+//     try {
+//       return await axios.post(`http://0.0.0.0:9001/api/timer/get_memo`, {data})
+//         .then(response => response.data)
+//         .then(data => data)
+
+//     } catch (error) {
+//       console.log(error.message)
+//     }
+    
+//   }
+// );
+
 export const updateTime = createAsyncThunk(
   'user/updateTime',
   async (data) => {
-    console.log(data)
     let newDate = new Date();
     let time = `${transformTime(newDate.getHours())}:${transformTime(newDate.getMinutes())}:${transformTime(newDate.getSeconds())}`;
     data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime((newDate.getMonth()+1).toString())}-${transformTime(newDate.getDate().toString())} ${time}`
     try {
       return await axios.put(`http://0.0.0.0:9001/api/timer/update_time`, data)
         .then(response => response.data)
-        .then(data => console.log(data))
+        .then(data => data)
 
     } catch (error) {
       console.log(error.message)
@@ -44,6 +59,7 @@ const timerSlice = createSlice({
   name: 'package',
   initialState: {
     package: [],
+    task: [],
   },
 
   reducers: {
@@ -66,6 +82,13 @@ const timerSlice = createSlice({
       //state.package = payload;
     },
     [updateTime.rejected]: (state, action) => { },
+    ///
+    // [getMemo.pending]: (state, action) => { state.status = 'loading'; },
+    // [getMemo.fulfilled]: (state, { payload }) => {
+    //   state.status = 'resolved';
+    //   state.task = payload;
+    // },
+    // [getMemo.rejected]: (state, action) => { },
     ///
   },
 });

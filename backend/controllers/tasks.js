@@ -12,7 +12,7 @@ exports.getTasks = async (req, res, next) => {
     try {
 
         const tasks = await sequelize.query(`
-        SELECT firstname, memo, "userId", "Tasks".id, "Tasks".hours, "Tasks".minutes, "Tasks".minutes  FROM "Users"
+        SELECT firstname, memo, "userId", "Tasks".id, "Tasks".hours, "Tasks".minutes, "Tasks".seconds  FROM "Users"
             JOIN "Tasks"
                 ON "Users".id = "Tasks"."userId"
             WHERE "Users".id = ${id}

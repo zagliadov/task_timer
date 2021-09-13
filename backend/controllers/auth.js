@@ -23,7 +23,8 @@ exports.login = async (req, res, next) => {
         SELECT id, firstname, lastname, email, password, role FROM "Users"
         WHERE email = '${email}'
     `);
-        if (!user[1].rowCount) return res.json({ message: 'Wrong email' })
+        if (!user[1].rowCount) return res.end()
+        // res.json({ message: 'Wrong email' })
         if (password !== user[0][0].password) return res.json({ message: 'Wrong password' })
 
         const token = jwt.sign({
