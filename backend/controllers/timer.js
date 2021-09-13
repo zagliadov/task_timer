@@ -12,12 +12,12 @@ exports.saveTaskPackage = async (req, res, next) => {
     const date = req.body.date
     //**************************************************************** */
 
-    
-    
-      
+
+
+
     //**************************************************************** */
     try {
-        
+
         await sequelize.query(`
             INSERT INTO "Tasks"(hours, minutes, seconds, memo, "userId", picture, "createdAt", "updatedAt")
                 VALUES('${hours}','${minutes}', '${seconds}', '${memo}', '${id}', '{}', '${date}', '${date}')
@@ -29,4 +29,22 @@ exports.saveTaskPackage = async (req, res, next) => {
     }
 };
 
+
+
+exports.updateTime = async (req, res, next) => {
+    console.log(req.body)
+    const { hours, minutes, seconds, memo, date } = req.body;
+
+    try {
+
+        await sequelize.query(`
+        UPDATE "Tasks" SET "hours" = ${hours}, "minutes" = ${minutes}, "seconds" = ${seconds}, "updatedAt" = '${date}'
+        WHERE "memo" = '${memo}'
+           `)
+
+
+    } catch (error) {
+        console.log(error.message)
+    }
+};
 

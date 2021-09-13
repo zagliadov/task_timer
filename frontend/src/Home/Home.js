@@ -5,7 +5,7 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { transformTime } from '../features/utils/utils';
-import { saveTaskPackage } from '../features/Timer/timerSlice';
+import { saveTaskPackage, updateTime } from '../features/Timer/timerSlice';
 import Options from './components/Options/Options';
 import Error from '../Error/Error';
 
@@ -17,6 +17,7 @@ const Home = () => {
     const [noMemo, setNoMemo] = useState(false);
     let [click, setClick] = useState(0); // Сколько раз пользователь нажал плей без указания memo
     let memo = useRef('');
+    let [saveData, setSaveData] = useState(true)
     let timeStamp = {};
     let [seconds, setSeconds] = useState(0);
     let [minutes, setMinutes] = useState(0);
@@ -56,7 +57,11 @@ const Home = () => {
 
     useEffect(() => {
         timeFrameControl(seconds, minutes, hours)
+        // localStorage.removeItem('timeStamp')
     }, [seconds, minutes, hours])
+    // useEffect(() => {
+    //     localStorage.removeItem('memo')
+    // }, [])
 
     let zero = (item) => {
         if (item < 10) return '0' + item
@@ -95,9 +100,29 @@ const Home = () => {
         setStart(true); // Отображение кнопки pause
         tick();
         if (memo.current.value !== localStorage.getItem('memo')) {
+            setSaveData(true);
             localStorage.setItem('memo', memo.current.value)
-            resetTimer()
+            resetTimer();
+            // Если memo поменялось делаем возможным новую запись в базу
         }
+        // if (memo.current.value === localStorage.getItem('memo')) {
+        //     let id = user.id
+        //     if(!localStorage.getItem('timeStamp')) return
+
+        //     let time = JSON.parse(localStorage.getItem('timeStamp'));
+        //     let {hours, minutes, seconds} = time
+        //     let memo = localStorage.getItem('memo');
+        //     dispatch(updateTime({hours, minutes, seconds, memo}))
+        // }
+        // if (!saveData) {
+        //     let id = user.id
+        //     if (!localStorage.getItem('timeStamp')) return
+
+        //     let time = JSON.parse(localStorage.getItem('timeStamp'));
+        //     let { hours, minutes, seconds } = time
+        //     let memo = localStorage.getItem('memo');
+        //     dispatch(updateTime({ hours, minutes, seconds, memo }))
+        // }
 
     }
     const resetTimer = () => {
@@ -107,14 +132,39 @@ const Home = () => {
     }
 
 
+
     const handlePause = () => {
         tick();
         setStart(false); // Отображение кнопки play
         getTime(hours, minutes, seconds)
         timeStamp.memo = memo.current.value
         localStorage.setItem('timeStamp', JSON.stringify(timeStamp))
-        let id = user.id
-        dispatch(saveTaskPackage({ timeStamp, id }))
+
+
+        console.log(saveData)
+        //saveData по дефолту true
+        if (!saveData) { //если false
+            let time = JSON.parse(localStorage.getItem('timeStamp'));
+            return dispatch(updateTime({
+                hours: time.hours,
+                minutes: time.minutes,
+                seconds: time.seconds,
+                memo: localStorage.getItem('memo')
+            }))
+            // 
+        } else { // если saveData true
+            dispatch(saveTaskPackage({ timeStamp, id: user.id })) //Запись в базу новых данных только через saveData(true)
+            setSaveData(false)// Отключаем запись в базу, думая что задача не поменялась следущая задача обновить ту же запись в базе
+        }
+
+        //если true сохраняем новую запись
+
+
+
+
+
+
+
     }
 
 
@@ -170,7 +220,7 @@ const Home = () => {
 
                     <input type='text'
                         className={
-                            (click > 1) ? classes.dificultCase : classes.inputMemo 
+                            (click > 1) ? classes.dificultCase : classes.inputMemo
                         }
                         ref={memo} />
                 </div>

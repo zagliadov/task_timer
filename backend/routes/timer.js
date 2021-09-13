@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    saveTaskPackage
+    saveTaskPackage,
+    updateTime
 } = require('../controllers/timer');
 
 
@@ -11,6 +12,8 @@ const {
 router.route('/add_task')
     .post(saveTaskPackage);
 
+router.route('/update_time')
+    .put(updateTime);
 
 
 

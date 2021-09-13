@@ -11,6 +11,7 @@ app.use(express.json());
 
 app.use('/api/timer', require('./routes/timer.js'));
 app.use('/api/auth' , require('./routes/auth.js'));
+app.use('/api/tasks', require('./routes/tasks.js'));
 
 
 sequelize.sync().then(() => {

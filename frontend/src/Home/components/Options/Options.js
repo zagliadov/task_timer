@@ -1,6 +1,6 @@
 import React from 'react';
 import Limitation from '../Limitation/Limitation';
-import SomeFunction from '../SomeFunction/SomeFunction';
+import TaskTable from '../TaskTable/TaskTable';
 import OneMoreFunction from '../OneMoreFunction/OneMoreFunction';
 import { Link, Switch, Route } from 'react-router-dom';
 import classes from './options.module.sass';
@@ -12,7 +12,7 @@ const Options = () => {
             <h2>Options</h2>
             <menu>
                 <Link to='/limitations' className={classes.link} >Time limit</Link>
-                <Link to='/somefunction' className={classes.link} >Some function</Link>
+                <Link to='/tasktable' className={classes.link} >Task table</Link>
                 <Link to='/onemorefunction' className={classes.link} >One more function</Link>
             </menu>
 
@@ -25,8 +25,8 @@ const Options = () => {
                 <Route path="/limitations">
                     <Limitation />
                 </Route>
-                <Route path="/somefunction">
-                    <SomeFunction />
+                <Route path="/tasktable">
+                    <TaskTable />
                 </Route>
                 <Route path="/onemorefunction">
                     <OneMoreFunction />
