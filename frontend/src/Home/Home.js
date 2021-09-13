@@ -57,10 +57,11 @@ const Home = () => {
 
     useEffect(() => {
         timeFrameControl(seconds, minutes, hours)
-        // localStorage.removeItem('timeStamp')
-    }, [seconds, minutes, hours])
+    }, [seconds, minutes, hours]);
+    
     // useEffect(() => {
     //     localStorage.removeItem('memo')
+    //     localStorage.removeItem('timeStamp')
     // }, [])
 
     let zero = (item) => {
@@ -77,11 +78,6 @@ const Home = () => {
         }
     }
 
-    // useEffect(() => {
-    //     localStorage.setItem('taskPackage', JSON.stringify(taskPackage))
-    // }, [taskPackage])
-
-
     const handlePlay = (e) => {
         /**
          * Не дает включить счетчик если memo не заполнен
@@ -96,34 +92,21 @@ const Home = () => {
             setNoMemo(false)
             setClick(0)
         }  // Убираем Error если memo указан
-        if (memo.current.value.length === 0) return         // Если memo не указан не запускаем счетчик
+        if (memo.current.value.length === 0) return  // Если memo не указан не запускаем счетчик
         setStart(true); // Отображение кнопки pause
         tick();
         if (memo.current.value !== localStorage.getItem('memo')) {
-            setSaveData(true);
+            setSaveData(true); // Делаем true если мемо не совпадает
+
+            // localStorage.removeItem('memo')
+            // localStorage.removeItem('timeStamp')
+            // setTimeout(() => {
+            //     localStorage.setItem('memo', memo.current.value)
+            // }, 1000)
             localStorage.setItem('memo', memo.current.value)
             resetTimer();
             // Если memo поменялось делаем возможным новую запись в базу
         }
-        // if (memo.current.value === localStorage.getItem('memo')) {
-        //     let id = user.id
-        //     if(!localStorage.getItem('timeStamp')) return
-
-        //     let time = JSON.parse(localStorage.getItem('timeStamp'));
-        //     let {hours, minutes, seconds} = time
-        //     let memo = localStorage.getItem('memo');
-        //     dispatch(updateTime({hours, minutes, seconds, memo}))
-        // }
-        // if (!saveData) {
-        //     let id = user.id
-        //     if (!localStorage.getItem('timeStamp')) return
-
-        //     let time = JSON.parse(localStorage.getItem('timeStamp'));
-        //     let { hours, minutes, seconds } = time
-        //     let memo = localStorage.getItem('memo');
-        //     dispatch(updateTime({ hours, minutes, seconds, memo }))
-        // }
-
     }
     const resetTimer = () => {
         setSeconds(0);
@@ -143,7 +126,7 @@ const Home = () => {
 
         console.log(saveData)
         //saveData по дефолту true
-        if (!saveData) { //если false
+        if (!saveData) { //если false обновляем запись в базе
             let time = JSON.parse(localStorage.getItem('timeStamp'));
             return dispatch(updateTime({
                 hours: time.hours,
@@ -151,8 +134,8 @@ const Home = () => {
                 seconds: time.seconds,
                 memo: localStorage.getItem('memo')
             }))
-            // 
-        } else { // если saveData true
+ 
+        } else { // если saveData true делаем новую запись в базе/ saveData делаем false
             dispatch(saveTaskPackage({ timeStamp, id: user.id })) //Запись в базу новых данных только через saveData(true)
             setSaveData(false)// Отключаем запись в базу, думая что задача не поменялась следущая задача обновить ту же запись в базе
         }

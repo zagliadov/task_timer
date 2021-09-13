@@ -10,12 +10,6 @@ exports.saveTaskPackage = async (req, res, next) => {
     const { hours, minutes, seconds, memo } = req.body.timeStamp;
     const id = req.body.id
     const date = req.body.date
-    //**************************************************************** */
-
-
-
-
-    //**************************************************************** */
     try {
 
         await sequelize.query(`
@@ -37,10 +31,11 @@ exports.updateTime = async (req, res, next) => {
 
     try {
 
-        await sequelize.query(`
+       const a = await sequelize.query(`
         UPDATE "Tasks" SET "hours" = ${hours}, "minutes" = ${minutes}, "seconds" = ${seconds}, "updatedAt" = '${date}'
         WHERE "memo" = '${memo}'
-           `)
+           `);
+           res.json(a)
 
 
     } catch (error) {
