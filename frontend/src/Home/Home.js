@@ -140,9 +140,8 @@ const Home = () => {
                     taskId: id[0].id,
                 }))
             } else {
-                console.log(saveData)
-            dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
-            setSaveData(false)
+                dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
+                setSaveData(false)
             }
         } else {
             // если saveData true делаем новую запись в базе/ saveData делаем false
@@ -160,11 +159,10 @@ const Home = () => {
                     usid: user.id,
                     taskId: id[0].id,
                 }))
-                
-            } else{
-                console.log(saveData)
-            dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
-            setSaveData(false)
+
+            } else {
+                dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
+                setSaveData(false)
             }
             // Отключаем запись в базу, думая что задача не поменялась следущая задача обновить ту же запись в базе
         }
