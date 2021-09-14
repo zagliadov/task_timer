@@ -1,13 +1,7 @@
 import React from 'react';
 import classes from './limitation.module.sass';
-import TimePicker from 'timepicker.js'
 
 const Limitation = () => {
-
-
-
-
-
 
 
     return (

@@ -1,7 +1,6 @@
 require('dotenv').config();
 const sequelize = require('../sequelize/sequelize')
-const fs = require('fs');
-const childProcess = require('child_process')
+
 
 
 
@@ -11,14 +10,10 @@ exports.saveTaskPackage = async (req, res, next) => {
     const date = req.body.date
     try {
         await sequelize.query(`
-            INSERT INTO "Tasks"(hours, minutes, seconds, memo, "userId", picture, "createdAt", "updatedAt")
-                VALUES('${hours}','${minutes}', '${seconds}', '${memo}', '${id}', '{}', '${date}', '${date}')
+            INSERT INTO "Tasks"(hours, minutes, seconds, memo, "userId", picture, "createdAt")
+                VALUES('${hours}','${minutes}', '${seconds}', '${memo}', '${id}', '{}', '${date}')
            `)
-        // const ids = await sequelize.query(`
-        //     SELECT id FROM "Tasks"
-        //         WHERE memo = '${memo}'
-        // `)
-        // res.json(ids)
+
 
     } catch (error) {
         console.log(error.message)
@@ -29,14 +24,15 @@ exports.saveTaskPackage = async (req, res, next) => {
 
 exports.updateTime = async (req, res, next) => {
     console.log(req.body)
-    const { hours, minutes, seconds, memo, date, usid, taskId } = req.body;
+    const { hours, minutes, seconds, memo, usid, taskId, date } = req.body;
 
 
     try {
         await sequelize.query(`
-        UPDATE "Tasks" SET "hours" = ${hours}, "minutes" = ${minutes}, "seconds" = ${seconds}, "updatedAt" = '${date}'
-        WHERE "memo" = '${memo}' AND "userId" = '${usid}' AND id = '${taskId}'
+        UPDATE "Tasks" SET "hours" = ${hours}, "minutes" = ${minutes}, "seconds" = ${seconds}
+        WHERE "memo" = '${memo}' AND "userId" = '${usid}' AND id = '${taskId}' AND "createdAt" = '${date}'
            `);
+
         res.end()
 
 
@@ -45,17 +41,3 @@ exports.updateTime = async (req, res, next) => {
     }
 };
 
-
-// exports.getMemo = async (req, res, next) => {
-//     let memo = req.body.data.memo;
-//     let ids = req.body.data.id;
-//     console.log(req.body)
-//     try {
-//        const task = await sequelize.query(`
-//         SELECT * FROM "Tasks" WHERE "memo" = '${memo}' AND "userId" = '${ids}'
-//        `)
-//        res.json(task[0])
-//     } catch (error) {
-//         console.log(error.message)
-//     }
-// };

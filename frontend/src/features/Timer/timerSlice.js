@@ -7,12 +7,11 @@ export const saveTaskPackage = createAsyncThunk(
   'user/saveTaskPackage',
   async (data) => {
     let newDate = new Date();
-    let time = `${transformTime(newDate.getHours())}:${transformTime(newDate.getMinutes())}:${transformTime(newDate.getSeconds())}`;
-    data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime((newDate.getMonth()+1).toString())}-${transformTime(newDate.getDate().toString())} ${time}`
+    data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime((newDate.getMonth() + 1).toString())}-${transformTime(newDate.getDate().toString())}`
     try {
       return await axios.post(`http://0.0.0.0:9001/api/timer/add_task`, data)
         .then(response => response.data)
-        
+
 
     } catch (error) {
       console.log(error.message)
@@ -21,29 +20,13 @@ export const saveTaskPackage = createAsyncThunk(
 );
 
 
-// export const getMemo = createAsyncThunk(
-//   'user/getMemo',
-//   async (data) => {
-
-//     try {
-//       return await axios.post(`http://0.0.0.0:9001/api/timer/get_memo`, {data})
-//         .then(response => response.data)
-//         .then(data => data)
-
-//     } catch (error) {
-//       console.log(error.message)
-//     }
-    
-//   }
-// );
 
 export const updateTime = createAsyncThunk(
   'user/updateTime',
   async (data) => {
-    let newDate = new Date();
-    let time = `${transformTime(newDate.getHours())}:${transformTime(newDate.getMinutes())}:${transformTime(newDate.getSeconds())}`;
-    data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime((newDate.getMonth()+1).toString())}-${transformTime(newDate.getDate().toString())} ${time}`
     try {
+      let newDate = new Date();
+      data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime((newDate.getMonth() + 1).toString())}-${transformTime(newDate.getDate().toString())}`
       return await axios.put(`http://0.0.0.0:9001/api/timer/update_time`, data)
         .then(response => response.data)
         .then(data => data)

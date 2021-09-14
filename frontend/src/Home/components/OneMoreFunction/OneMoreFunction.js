@@ -1,9 +1,11 @@
 import React from 'react';
+import PleaseLogIn from '../../../features/utils/PleaseLogIn/PleaseLogIn';
+
 
 const OneMoreFunction = () => {
     return (
         <div>
-            ONE MORE FUNCTION
+            <PleaseLogIn />
         </div>
     );
 };

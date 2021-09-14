@@ -39,8 +39,8 @@ const Home = () => {
     let tick = () => {
         //Запускает и оставнавливает счетчик
         if (!timer.current) {
-            timer.current = setInterval(() => setSeconds(seconds => +seconds + 1), 1000)
-            
+            timer.current = setInterval(() => setSeconds(seconds => +seconds + 1), 1)
+
         } else {
             clearInterval(timer.current);
             timer.current = null
@@ -94,8 +94,8 @@ const Home = () => {
          * и если они идентичны продолжаешь считать время, если нет сбрасывает время
          * и пишет новое memo
          */
-        setClick(++click)
-        
+        if (!user.role) return // Если пользователь авторизован
+        setClick(++click);
         if (memo.current.value.length === 0) setNoMemo(true)  // Показываем Error что не указан memo
         if (memo.current.value.length > 0) {
             setNoMemo(false)
@@ -104,19 +104,16 @@ const Home = () => {
         if (memo.current.value.length === 0) return  // Если memo не указан не запускаем счетчик
         setStart(true); // Отображение кнопки pause
         tick();
-        
-        if (memo.current.value !== localStorage.getItem('memo')) {
+
+        if (memo.current.value !== localStorage.getItem('oldmemo')) {
             setSaveData(true); // Делаем true если мемо не совпадает
-        //    if(+minutes > 0 || +seconds > 0) return
-    
-             resetTimer();
+            resetTimer();
             // Если memo поменялось делаем возможным новую запись в базу
         }
 
         localStorage.setItem('memo', memo.current.value)
-        //dispatch(getMemo({ memo: localStorage.getItem('memo'), id: user.id }))
     }
-    
+
 
     const handlePause = () => {
         tick();
@@ -131,8 +128,29 @@ const Home = () => {
                 return task.memo === memo.current.value
             })
             if (!id) return
-            if (id[0]?.memo === localStorage.getItem('memo')) {
+            if (id[0]?.memo === localStorage.getItem('oldmemo')) {
 
+                let time = JSON.parse(localStorage.getItem('timeStamp'));
+                return dispatch(updateTime({
+                    hours: time.hours,
+                    minutes: time.minutes,
+                    seconds: time.seconds,
+                    memo: localStorage.getItem('oldmemo'),
+                    usid: user.id,
+                    taskId: id[0].id,
+                }))
+            } else {
+                console.log(saveData)
+            dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
+            setSaveData(false)
+            }
+        } else {
+            // если saveData true делаем новую запись в базе/ saveData делаем false
+            let id = tasks.filter(task => {
+                return task.memo === memo.current.value
+            })
+            if (!id) return
+            if (id[0]?.memo === localStorage.getItem('memo')) {
                 let time = JSON.parse(localStorage.getItem('timeStamp'));
                 return dispatch(updateTime({
                     hours: time.hours,
@@ -142,30 +160,13 @@ const Home = () => {
                     usid: user.id,
                     taskId: id[0].id,
                 }))
+                
+            } else{
+                console.log(saveData)
+            dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
+            setSaveData(false)
             }
-
-        } else {
-            // если saveData true делаем новую запись в базе/ saveData делаем false
-            let id = tasks.filter(task => {
-                return task.memo === memo.current.value
-            })
-            if (!id) return
-            if (id[0]?.memo === localStorage.getItem('memo')) {
-
-                // setSaveData(false)
-                let time = JSON.parse(localStorage.getItem('timeStamp'));
-                console.log(id[0].hours)
-                return dispatch(updateTime({
-                    hours: time.hours,
-                    minutes: time.minutes ,
-                    seconds: time.seconds,
-                    memo: localStorage.getItem('memo'),
-                    usid: user.id,
-                    taskId: id[0].id,
-                }))
-            }
-            dispatch(saveTaskPackage({ timeStamp, id: user.id })) //Запись в базу новых данных только через saveData(true)
-            setSaveData(false)// Отключаем запись в базу, думая что задача не поменялась следущая задача обновить ту же запись в базе
+            // Отключаем запись в базу, думая что задача не поменялась следущая задача обновить ту же запись в базе
         }
         //если true сохраняем новую запись
     }
@@ -225,7 +226,7 @@ const Home = () => {
                         className={
                             (click > 1) ? classes.dificultCase : classes.inputMemo
                         }
-                        ref={memo} 
+                        ref={memo}
                         onChange={() => {
                             let id = tasks.filter(task => {
                                 return task.memo === memo.current.value
@@ -233,14 +234,13 @@ const Home = () => {
                             setHours(id[0]?.hours || 0)
                             setMinutes(id[0]?.minutes || 0)
                             setSeconds(id[0]?.seconds || 0)
-                            
-                            localStorage.setItem('memo', memo.current.value)
-                        }}/>
+                            localStorage.setItem('oldmemo', memo.current.value)
+                        }} />
                 </div>
 
             }
 
-            <Options start={start}/>
+            <Options start={start} />
 
 
 
