@@ -4,6 +4,8 @@ import { getTasks } from '../../../features/Tasks/tasksSlice';
 import PleaseLogIn from '../../../features/utils/PleaseLogIn/PleaseLogIn';
 import Diagram from './Diagram/Diagram';
 
+
+
 const TaskTable = ({ start }) => {
 
     const dispatch = useDispatch();
@@ -11,30 +13,13 @@ const TaskTable = ({ start }) => {
     const tasks = useSelector(state => state.tasks.tasks);
 
     useEffect(() => {
-        if (user.length === 0) return
         dispatch(getTasks(user.id))
-    }, [user, dispatch])
-
-    useEffect(() => {
-        dispatch(getTasks(user.id))
-    }, [start, dispatch, user.id])
-
+    }, [dispatch, start, user])
 
     return (
         <div>
             <PleaseLogIn />
-
-            {/* {tasks && tasks.map(task => {
-                return (
-                    <div key={task.id}>
-                        <p>Task: {task.memo} time: {task.hours}:{task.minutes}:{task.seconds}</p>
-                    </div>
-                )
-            })} */}
-            {(user.role) && 
-            <Diagram tasks={tasks} />
-            }
-            
+            <Diagram tasks={tasks} start={start} />
         </div>
     );
 };

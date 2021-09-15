@@ -6,10 +6,10 @@ const Time = () => {
     return (
         <div className={classes.clock_wrapper}>
             <div className={classes.clock}>
-                    <span>12</span>
+                    {/* <span>12</span>
                     <span>3</span>
                     <span>6</span>
-                    <span>9</span>
+                    <span>9</span> */}
             </div>
         </div>
 
