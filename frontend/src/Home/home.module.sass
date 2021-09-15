@@ -1,0 +1,92 @@
+@import '../colors/colors.module.sass'
+
+.root
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    width: 100%
+    box-sizing: border-box
+    h2
+        color: $someText
+.timer_wrapper
+    display: flex
+    align-items: center
+    justify-content: space-around
+    width: 100%
+    height: 120px
+    border: 1px solid $dominantColor
+    border-radius: 15px
+    box-sizing: border-box
+
+.timer_hours, .timer_minutes, .timer_seconds
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    height: 100%
+    span:nth-child(1)
+        font-size: 4rem
+        color: $dominantColor
+    span:nth-child(2)
+        color: #9b9a9a
+        font-weight: 900
+
+.divider
+    display: flex
+    align-items: center
+    height: 100%
+    span:nth-child(1)
+        font-size: 3rem
+        padding-bottom: 25px
+        font-weight: 900
+        color: $dominantColor
+
+.timer_button
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 70px
+    height: 70px
+    border-radius: 50%
+    border: 2px solid $dominantColor
+
+.timer_icons_pause
+    font-size: 2rem
+    color: $dominantColor
+
+.timer_icons_play
+    margin-left: 8px
+    font-size: 2rem
+    color: $dominantColor
+
+.form_wrapper
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    align-items: center
+    width: 450px
+    height: 170px
+
+.inputMemo
+    border: none
+    background-color: #dbdfde
+    font-size: 24px
+    outline: none
+    width: 95%
+
+.dificultCase
+    border: none
+    background-color: #dbdfde
+    box-shadow: 0px 2px 6px #ff19199f
+    font-size: 24px
+    outline: none
+    width: 95%
+    transform-origin: 50% 94%
+    animation: dif 0.2s linear 5
+
+@keyframes dif
+    0%
+        box-shadow: 0px 2px 6px #6969699f
+    100%
+        box-shadow: 0px 2px 6px #ff19199f 

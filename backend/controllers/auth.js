@@ -20,13 +20,15 @@ exports.login = async (req, res, next) => {
 
     try {
         const user = await sequelize.query(`
-        SELECT firstname, lastname, email, password, role FROM "Users"
+        SELECT id, firstname, lastname, email, password, role FROM "Users"
         WHERE email = '${email}'
     `);
-        if (!user[1].rowCount) return res.json({ message: 'Wrong email' })
+        if (!user[1].rowCount) return res.end()
+        // res.json({ message: 'Wrong email' })
         if (password !== user[0][0].password) return res.json({ message: 'Wrong password' })
 
         const token = jwt.sign({
+            id: user[0][0].id,
             firstname: user[0][0].firstname,
             lastname: user[0][0].lastname,
             email: user[0][0].email,

@@ -1,14 +1,43 @@
+require('dotenv').config();
+const sequelize = require('../sequelize/sequelize')
 
 
 
-exports.getTimer = async (req, res, next) => {
+
+exports.saveTaskPackage = async (req, res, next) => {
+    const { hours, minutes, seconds, memo } = req.body.timeStamp;
+    const id = req.body.id
+    const date = req.body.date
     try {
-       const t = {
-           id: Date.now(),
-           title: 'hello',
-       }
-       res.json(t)
+        await sequelize.query(`
+            INSERT INTO "Tasks"(hours, minutes, seconds, memo, "userId", picture, "createdAt")
+                VALUES('${hours}','${minutes}', '${seconds}', '${memo}', '${id}', '{}', '${date}')
+           `)
+
+
     } catch (error) {
         console.log(error.message)
     }
 };
+
+
+
+exports.updateTime = async (req, res, next) => {
+    console.log(req.body)
+    const { hours, minutes, seconds, memo, usid, taskId, date } = req.body;
+
+
+    try {
+        await sequelize.query(`
+        UPDATE "Tasks" SET "hours" = ${hours}, "minutes" = ${minutes}, "seconds" = ${seconds}
+        WHERE "memo" = '${memo}' AND "userId" = '${usid}' AND id = '${taskId}' AND "createdAt" = '${date}'
+           `);
+
+        res.end()
+
+
+    } catch (error) {
+        console.log(error.message)
+    }
+};
+

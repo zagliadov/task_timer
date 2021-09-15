@@ -18,7 +18,6 @@ const Main = () => {
                 <Route path="/">
                     <Home />
                 </Route>
-                
             </Switch>
         </main>
     );

@@ -1,0 +1,71 @@
+@import '../../../colors/colors.module.sass';  
+    
+.clock_wrapper
+    display: flex
+    justify-content: center
+    align-items: center
+    height: 120px
+    width: 120px
+
+.clock
+    border-radius: 60px
+    border: 3px solid $dominantColor
+    height: 80px
+    width: 80px
+    position: relative
+    &::after
+        content: ''
+        position: absolute
+        background-color: $dominantColor
+        height: 38px
+        width: 4px
+        border-radius: 5px
+        top: 2px
+        left: 48%
+        transform-origin: 50% 97%
+        animation: grdAiguille 2s linear infinite
+    &:before
+        content: ''
+        position: absolute
+        background-color: $dominantColor
+        top: 6px
+        left: 48%
+        height: 35px
+        width: 4px
+        border-radius: 5px
+        transform-origin: 50% 94%
+        animation: ptAiguille 12s linear infinite
+
+
+@keyframes grdAiguille
+    0%
+        transform: rotate(0deg)
+    100%
+        transform: rotate(360deg)
+
+@keyframes ptAiguille
+    0%
+        transform: rotate(0deg)
+    100%
+        transform: rotate(360deg)
+
+.clock
+    span
+        position: absolute
+        font-weight: bold
+        font-size: 24px
+        color: $dominantColor
+    span:nth-child(1)
+        top: -28px
+        left: 30px
+    span:nth-child(2)
+        top: 23px
+        left: 86px
+    span:nth-child(3)
+        top: 81px
+        left: 34px
+    span:nth-child(4)
+        top: 23px
+        left: -20px
+    
+

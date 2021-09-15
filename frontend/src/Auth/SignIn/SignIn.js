@@ -37,7 +37,7 @@ const SignIn = () => {
                 </section>
 
                 <section className={classes.input__wrapper_submit}>
-                    <input type='submit' />
+                    <input type='submit' value='Sign In' />
                 </section>
 
             </form>

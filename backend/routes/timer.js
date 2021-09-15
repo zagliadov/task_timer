@@ -2,16 +2,22 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    getTimer
+    saveTaskPackage,
+    updateTime,
+    // getMemo
 } = require('../controllers/timer');
 
 
 
 
-router.route('/')
-    .get(getTimer);
+router.route('/add_task')
+    .post(saveTaskPackage);
 
+router.route('/update_time')
+    .put(updateTime);
 
+// router.route('/get_memo')
+//     .post(getMemo);
 
 
 module.exports = router;

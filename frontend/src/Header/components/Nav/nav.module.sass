@@ -1,7 +1,17 @@
+@import '../../../colors/colors.module.sass';
+    
 .link
     text-decoration: none
     font-size: 20px
     padding-top: 5px
+    font-weight: bold
     padding-bottom: 5px
     padding-right: 5px
     padding-left: 10px
+    color: $linkAtRest
+    border-bottom: 2px solid transparent
+    transition: all 0.3s
+    &:hover
+        color: $linkOnHover
+        transition: all 0.3s
+        border-bottom: 2px solid $linkOnHover

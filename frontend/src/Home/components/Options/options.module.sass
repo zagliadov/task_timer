@@ -1,0 +1,41 @@
+@import '../../../colors/colors.module.sass';
+    
+.options_wrapper
+    display: flex
+    flex-direction: column
+    width: 100%
+    padding: 10px
+    menu
+        display: flex
+        padding: 10px 0
+    h2
+        color: $someText
+.link
+    text-decoration: none
+    font-size: 20px
+    padding-top: 5px
+    font-weight: bold
+    padding-bottom: 5px
+    padding-right: 5px
+    padding-left: 10px
+    color: $linkAtRest
+    border-bottom: 2px solid transparent
+    transition: all 0.2s
+    &:nth-child(1)
+        transition: all 0.2s
+        &:hover
+            border-bottom: 2px solid $linkOnHover
+            color: $linkOnHover
+            transition: all 0.2s
+    &:nth-child(2)
+        transition: all 0.2s
+        &:hover
+            color: $linkOnHover
+            border-bottom: 2px solid $linkOnHover
+            transition: all 0.2s
+    &:nth-child(3)
+        transition: all 0.2s
+        &:hover
+            color: $linkOnHover
+            border-bottom: 2px solid $linkOnHover
+            transition: all 0.2s

@@ -30,7 +30,10 @@ export const login = createAsyncThunk(
     try {
       return await axios.post(`http://0.0.0.0:9001/api/auth/login`, data)
         .then(response => response.data)
-        .then(data => data)
+        .then(data => {
+          if (!data) return
+          return data
+        })
 
 
 
@@ -66,6 +69,7 @@ const userSlice = createSlice({
   initialState: {
     user: [],
     token: '',
+    message: false,
   },
 
   reducers: {
@@ -88,8 +92,10 @@ const userSlice = createSlice({
     [login.pending]: (state, action) => { state.status = 'loading'; },
     [login.fulfilled]: (state, { payload }) => {
       state.status = 'resolved';
+      if (payload === undefined) state.message = true // Если
+      if (payload !== undefined) state.message = false
       state.token = payload;
-      localStorage.setItem('token', payload)
+      if (payload !== undefined) localStorage.setItem('token', payload)
     },
     [login.rejected]: (state, action) => { },
     /////
