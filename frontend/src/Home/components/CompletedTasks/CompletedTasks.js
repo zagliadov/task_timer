@@ -20,6 +20,7 @@ const CompletedTasks = () => {
         wrapper,
         change_date,
         root,
+        dummy,
         select__other__dates_button,
     } = classes;
 
@@ -49,7 +50,7 @@ const CompletedTasks = () => {
     useEffect(() => {
         dispatch(getCompletedTasksForDays({ sd, ed, id: user.id }))
     }, [update, dispatch, ed, sd, user.id])
-  
+
     return (
         <div className={root}>
             {!displayData && <PleaseLogIn />}
@@ -73,9 +74,19 @@ const CompletedTasks = () => {
                 </>
 
 
-
                 :
                 <section className={wrapper}>
+                    {getStartDate && <div className={dummy}>
+                        <p>
+                            Here you can see all tasks for a specific date or for a range of dates.
+                        </p>
+                        <p>
+                            The data is displayed in a table in which it is possible to delete a specific task.
+                        </p>
+                        <p>
+                            The total time spent on tasks is displayed below.
+                        </p>
+                    </div>}
                     {
                         startDateDisplay ? <h2>Selected date:</h2>//Если выбрана первая дата
                             : <h2>Select date</h2>
