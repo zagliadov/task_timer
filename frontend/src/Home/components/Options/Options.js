@@ -6,9 +6,10 @@ import { Link, Switch, Route } from 'react-router-dom';
 import classes from './options.module.sass';
 
 
-const Options = ({start}) => {
+const Options = ({ start }) => {
 
-    
+
+
     return (
         <section className={classes.options_wrapper}>
             <h2>Options</h2>
@@ -18,17 +19,13 @@ const Options = ({start}) => {
                 <Link to='/onemorefunction' className={classes.link} >One more function</Link>
             </menu>
 
-     
-
-
-
 
             <Switch>
                 <Route path="/limitations">
                     <Limitation />
                 </Route>
                 <Route path="/tasktable">
-                    <TaskTable start={start}/>
+                    <TaskTable start={start} />
                 </Route>
                 <Route path="/onemorefunction">
                     <OneMoreFunction />

@@ -6,12 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { transformTime } from '../features/utils/utils';
 import { saveTaskPackage, updateTime } from '../features/Timer/timerSlice';
+import { getTasks } from '../features/Tasks/tasksSlice';
 import Options from './components/Options/Options';
 import Error from '../Error/Error';
+import { zero } from '../features/utils/utils';
+
 
 const Home = () => {
     const user = useSelector(state => state.user.user);
-    //const taskPackage = useSelector(state => state.timer.package)
     const dispatch = useDispatch();
     const [start, setStart] = useState(false); // Отображение кнопки play pause
     const [noMemo, setNoMemo] = useState(false);
@@ -27,19 +29,13 @@ const Home = () => {
     let date = new Date();
     let day = transformTime(date.getDate())
     let month = moment().format('MMMM');
-
     let tasks = useSelector(state => state.tasks.tasks)
 
-
-
-
-
     const timer = useRef(null);
-
     let tick = () => {
         //Запускает и оставнавливает счетчик
         if (!timer.current) {
-            timer.current = setInterval(() => setSeconds(seconds => +seconds + 1), 1)
+            timer.current = setInterval(() => setSeconds(seconds => +seconds + 1), 1000)
 
         } else {
             clearInterval(timer.current);
@@ -66,12 +62,9 @@ const Home = () => {
         timeFrameControl(+seconds, +minutes, +hours)
     }, [seconds, minutes, hours]);
 
-
-
-    let zero = (item) => {
-        if (item < 10) return '0' + item
-        return item
-    }
+    useEffect(() => {
+        dispatch(getTasks(user.id))
+    }, [dispatch, user.id, start])
 
     let getTime = (h, m, s) => {
         //Собирает значения полей времени в обьект
@@ -95,28 +88,28 @@ const Home = () => {
          * и пишет новое memo
          */
         if (!user.role) return // Если пользователь авторизован
+        //Увеличиваем клик для визуального оформления
         setClick(++click);
-        if (memo.current.value.length === 0) setNoMemo(true)  // Показываем Error что не указан memo
+        if (memo.current.value.length === 0) setNoMemo(true) // Показываем Error что не указан memo
         if (memo.current.value.length > 0) {
             setNoMemo(false)
             setClick(0)
         }  // Убираем Error если memo указан
         if (memo.current.value.length === 0) return  // Если memo не указан не запускаем счетчик
         setStart(true); // Отображение кнопки pause
-        tick();
+        tick(); // Запускает счетчик
 
         if (memo.current.value !== localStorage.getItem('oldmemo')) {
             setSaveData(true); // Делаем true если мемо не совпадает
             resetTimer();
             // Если memo поменялось делаем возможным новую запись в базу
         }
-
         localStorage.setItem('memo', memo.current.value)
     }
 
-
     const handlePause = () => {
         tick();
+        dispatch(getTasks(user.id))
         setStart(false); // Отображение кнопки play
         getTime(hours, minutes, seconds)
         timeStamp.memo = memo.current.value
@@ -126,10 +119,14 @@ const Home = () => {
         if (!saveData) { //если false обновляем запись в базе
             let id = tasks.filter(task => {
                 return task.memo === memo.current.value
-            })
+            }) //В массиве tasks находим memo равное значению из инпута
             if (!id) return
             if (id[0]?.memo === localStorage.getItem('oldmemo')) {
-
+                /**
+                 * Если memo из фильтра равно oldmemo
+                 * парсим timeStamp из localStorage
+                 * Запоняем новыми данными обьект и отправляем для обновления
+                 */
                 let time = JSON.parse(localStorage.getItem('timeStamp'));
                 return dispatch(updateTime({
                     hours: time.hours,
@@ -140,16 +137,30 @@ const Home = () => {
                     taskId: id[0].id,
                 }))
             } else {
+                /**
+                 * Если memo из фильтра нет, значит записи в базе о задаче нет
+                 * Делаем новую запись в базу отправляя timeStamp и id пользователя
+                 * Флаг saveData true saveTaskPackage возможен
+                 * Переводим флаг saveData в false
+                 */
                 dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
                 setSaveData(false)
             }
         } else {
-            // если saveData true делаем новую запись в базе/ saveData делаем false
+            /**
+             * если saveData true делаем новую запись в базе/ saveData делаем false
+             * В массиве tasks находим memo равное значению из инпута
+             */
             let id = tasks.filter(task => {
                 return task.memo === memo.current.value
             })
             if (!id) return
             if (id[0]?.memo === localStorage.getItem('memo')) {
+                /**
+                 * Если memo из фильтра равно memo
+                 * парсим timeStamp из localStorage
+                 * Запоняем новыми данными обьект и отправляем для обновления
+                 */
                 let time = JSON.parse(localStorage.getItem('timeStamp'));
                 return dispatch(updateTime({
                     hours: time.hours,
@@ -159,16 +170,13 @@ const Home = () => {
                     usid: user.id,
                     taskId: id[0].id,
                 }))
-
             } else {
                 dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
                 setSaveData(false)
             }
             // Отключаем запись в базу, думая что задача не поменялась следущая задача обновить ту же запись в базе
         }
-        //если true сохраняем новую запись
     }
-
 
     return (
         <div className={classes.root}>
@@ -210,15 +218,12 @@ const Home = () => {
                                     onClick={() => {
                                         handlePause()
                                     }} />
-
                             }
-
                         </section>
                     </div>
                     {noMemo && <Error message='You have not chosen a memo'
                         click={click}
                     />}
-
 
                     <input type='text'
                         className={
@@ -237,11 +242,7 @@ const Home = () => {
                 </div>
 
             }
-
             <Options start={start} />
-
-
-
         </div>
     );
 };

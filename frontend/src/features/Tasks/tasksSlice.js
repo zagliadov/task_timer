@@ -1,7 +1,5 @@
-
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { transformTime } from '../utils/utils';
 
 export const getTasks = createAsyncThunk(
   'user/getTasks',
@@ -16,8 +14,6 @@ export const getTasks = createAsyncThunk(
     }
   }
 );
-
-
 
 const tasksSlice = createSlice({
   name: 'tasks',
