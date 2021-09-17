@@ -20,7 +20,6 @@ export const saveTaskPackage = createAsyncThunk(
 );
 
 
-
 export const updateTime = createAsyncThunk(
   'user/updateTime',
   async (data) => {
@@ -43,13 +42,20 @@ const timerSlice = createSlice({
   initialState: {
     package: [],
     task: [],
+    timeLimit: 0,
   },
 
   reducers: {
     getDataPackage(state, { payload }) {
       state.package.push(payload);
     },
-  },
+    setTimeLimit(state, {payload}) {
+      state.timeLimit = payload;
+    },
+    removeTimeLimit(state, {payload}) {
+      state.timeLimit = 0;
+    }
+   },
 
   extraReducers: {
     [saveTaskPackage.pending]: (state, action) => { state.status = 'loading'; },
@@ -76,7 +82,7 @@ const timerSlice = createSlice({
   },
 });
 
-// export const {  } = timerSlice.actions;
+ export const { setTimeLimit, removeTimeLimit } = timerSlice.actions;
 
 
 

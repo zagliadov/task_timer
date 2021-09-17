@@ -15,6 +15,7 @@ import { zero } from '../features/utils/utils';
 const Home = () => {
     const user = useSelector(state => state.user.user);
     const dispatch = useDispatch();
+    const timeLimit = useSelector(state => state.timer.timeLimit);
     const [start, setStart] = useState(false); // Отображение кнопки play pause
     const [noMemo, setNoMemo] = useState(false);
     let [click, setClick] = useState(0); // Сколько раз пользователь нажал плей без указания memo
@@ -29,13 +30,13 @@ const Home = () => {
     let date = new Date();
     let day = transformTime(date.getDate())
     let month = moment().format('MMMM');
-    let tasks = useSelector(state => state.tasks.tasks)
+    let tasks = useSelector(state => state.tasks.tasks);
 
     const timer = useRef(null);
     let tick = () => {
         //Запускает и оставнавливает счетчик
         if (!timer.current) {
-            timer.current = setInterval(() => setSeconds(seconds => +seconds + 1), 1000)
+            timer.current = setInterval(() => setSeconds(seconds => +seconds + 1), 1)
 
         } else {
             clearInterval(timer.current);
@@ -63,8 +64,14 @@ const Home = () => {
     }, [seconds, minutes, hours]);
 
     useEffect(() => {
+        if(typeof(user.id) === 'undefined') return
         dispatch(getTasks(user.id))
     }, [dispatch, user.id, start])
+
+    useEffect(() => {
+        
+    }, [timeLimit])
+
 
     let getTime = (h, m, s) => {
         //Собирает значения полей времени в обьект
@@ -143,8 +150,12 @@ const Home = () => {
                  * Флаг saveData true saveTaskPackage возможен
                  * Переводим флаг saveData в false
                  */
-                dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
-                setSaveData(false)
+                console.log(user.id)
+                if (user.id) {
+                    dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
+                    setSaveData(false)
+                }
+
             }
         } else {
             /**
@@ -185,7 +196,7 @@ const Home = () => {
                 <div className={classes.form_wrapper}>
                     <div className={classes.timer_wrapper}>
                         <section className={classes.timer_hours}>
-                            <span>
+                            <span className={(+timeLimit >= 8) ? classes.danger : null}>
                                 {zero(hours)}
                             </span>
                             <span>Hours</span>
@@ -194,14 +205,14 @@ const Home = () => {
                             <span>:</span>
                         </div>
                         <section className={classes.timer_minutes}>
-                            <span>{zero(minutes)}</span>
+                            <span className={(+timeLimit >= 8) ? classes.danger : null}>{zero(minutes)}</span>
                             <span>Minutes</span>
                         </section>
                         <div className={classes.divider}>
                             <span>:</span>
                         </div>
                         <section className={classes.timer_seconds}>
-                            <span>{zero(seconds)}</span>
+                            <span className={(+timeLimit >= 8) ? classes.danger : null}>{zero(seconds)}</span>
                             <span>Seconds</span>
                         </section>
                         <section className={classes.timer_button}>

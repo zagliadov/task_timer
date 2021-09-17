@@ -1,6 +1,6 @@
 require('dotenv').config();
 const sequelize = require('../sequelize/sequelize')
-const fs = require('fs');
+
 
 const transformTime = (n) => {
     if (n < 10) return '0' + n;
@@ -21,6 +21,42 @@ exports.getTasks = async (req, res, next) => {
             WHERE "Users".id = ${id} AND "Tasks"."createdAt" = '${date}'
            `)
         res.json(tasks[0])
+
+    } catch (error) {
+        console.log(error.message)
+    }
+};
+
+exports.getCompletedTasksForDays = async (req, res, next) => {
+    const startDate = req.body.sd,
+        endDate = req.body.ed,
+        id = req.body.id;
+    
+    
+    try {
+        const tasks = await sequelize.query(`
+            SELECT * FROM "Tasks"
+            WHERE "userId" = ${id} AND "createdAt" BETWEEN '${startDate}' AND '${endDate}'
+            ORDER BY "createdAt" ASC;
+        `);
+        res.json(tasks[0])
+
+    } catch (error) {
+        console.log(error.message)
+    }
+};
+
+
+exports.removeTask = async (req, res, next) => {
+    const id = req.body.id
+    
+    try {
+        await sequelize.query(`
+            DELETE FROM "Tasks"
+                WHERE "Tasks".id = '${id}'
+        `);
+        
+        res.end()
 
     } catch (error) {
         console.log(error.message)

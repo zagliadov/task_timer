@@ -13,6 +13,7 @@ exports.saveTaskPackage = async (req, res, next) => {
             INSERT INTO "Tasks"(hours, minutes, seconds, memo, "userId", picture, "createdAt")
                 VALUES('${hours}','${minutes}', '${seconds}', '${memo}', '${id}', '{}', '${date}')
            `)
+        res.end();
 
 
     } catch (error) {
