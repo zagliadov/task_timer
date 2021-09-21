@@ -32,6 +32,44 @@ const Home = () => {
     let month = moment().format('MMMM');
     let tasks = useSelector(state => state.tasks.tasks);
 
+
+
+    let hour = 0,
+        minute = 0,
+        second = 0;
+        
+    let countTotalTime = (item) => {
+        item.forEach(task => {
+            if (task.hours === 0) return
+            hour += +task.hours
+            if (task.minutes === 0) return
+            minute += +task.minutes
+            if (task.seconds === 0) return
+            second += +task.seconds
+            while (second > 60) {
+                minute++;
+                second -= 60;
+            }
+            while (minute >= 60) {
+                hour++;
+                minute -= 60
+            }
+
+        })
+    }
+
+    countTotalTime(tasks)
+
+
+
+
+
+
+
+
+
+
+
     const timer = useRef(null);
     let tick = () => {
         //Запускает и оставнавливает счетчик
@@ -64,12 +102,12 @@ const Home = () => {
     }, [seconds, minutes, hours]);
 
     useEffect(() => {
-        if(typeof(user.id) === 'undefined') return
+        if (typeof (user.id) === 'undefined') return
         dispatch(getTasks(user.id))
     }, [dispatch, user.id, start])
 
     useEffect(() => {
-        
+
     }, [timeLimit])
 
 
@@ -196,7 +234,7 @@ const Home = () => {
                 <div className={classes.form_wrapper}>
                     <div className={classes.timer_wrapper}>
                         <section className={classes.timer_hours}>
-                            <span className={(+timeLimit >= 8) ? classes.danger : null}>
+                            <span className={(hour >= +timeLimit) ? classes.danger : null}>
                                 {zero(hours)}
                             </span>
                             <span>Hours</span>
@@ -205,14 +243,14 @@ const Home = () => {
                             <span>:</span>
                         </div>
                         <section className={classes.timer_minutes}>
-                            <span className={(+timeLimit >= 8) ? classes.danger : null}>{zero(minutes)}</span>
+                            <span className={(hour >= +timeLimit) ? classes.danger : null}>{zero(minutes)}</span>
                             <span>Minutes</span>
                         </section>
                         <div className={classes.divider}>
                             <span>:</span>
                         </div>
                         <section className={classes.timer_seconds}>
-                            <span className={(+timeLimit >= 8) ? classes.danger : null}>{zero(seconds)}</span>
+                            <span className={(hour >= +timeLimit) ? classes.danger : null}>{zero(seconds)}</span>
                             <span>Seconds</span>
                         </section>
                         <section className={classes.timer_button}>

@@ -64,10 +64,10 @@ const Limitation = ({ start }) => {
                 </div>
                 <div>
                     <p>Total elapsed time</p>
-                    <span className={(+timeLimit >= 8) ? danger : lite}>
+                    <span className={(hour >= +timeLimit) ? danger : lite}>
                         {zero(hour)}:{zero(minutes)}:{zero(seconds)}
                     </span>
-                    {(+timeLimit >= 8) ? <span> You have exceeded the time limit</span> : null}
+                    {(hour >= +timeLimit) ? <span> You have exceeded the time limit</span> : null}
                 </div>
 
             </section>

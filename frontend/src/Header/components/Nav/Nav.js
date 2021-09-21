@@ -35,7 +35,7 @@ const Nav = () => {
                     <Link to='/signup' className={classes.link} >Sign Up</Link>
                 </>
             }
-            <Link to='/somesome' className={classes.link}>Some</Link>
+            
 
 
         </nav>
