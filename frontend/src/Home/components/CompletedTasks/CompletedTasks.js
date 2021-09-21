@@ -7,7 +7,7 @@ import { zero } from '../../../features/utils/utils';
 import { getCompletedTasksForDays } from '../../../features/Tasks/tasksSlice';
 import classes from './completedtasks.module.sass';
 import TasksTable from './TasksTable/TasksTable';
-
+import { showMatches } from '../../../features/Tasks/tasksSlice';
 
 const CompletedTasks = () => {
 
@@ -19,8 +19,10 @@ const CompletedTasks = () => {
         display__button,
         wrapper,
         change_date,
+        input_for_iterating_over_letters,
         root,
         dummy,
+        wrapper_input_for_iterating_over_letters,
         select__other__dates_button,
     } = classes;
 
@@ -59,6 +61,13 @@ const CompletedTasks = () => {
                 <>
                     <section>
                         <h2>Your completed tasks</h2>
+                        <div className={wrapper_input_for_iterating_over_letters}>
+                            <input type='text'
+                                className={input_for_iterating_over_letters}
+                                onChange={(e) => dispatch(showMatches(e.target.value))} />
+                            <span>Display a specific tasks</span>
+                        </div>
+
                         <button className={select__other__dates_button}
                             onClick={() => {
                                 setDisplayData(false); // Возврат к выбору дат

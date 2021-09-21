@@ -43,6 +43,19 @@ export const removeTask = createAsyncThunk(
   }
 );
 
+export const showMatches = createAsyncThunk(
+  'tasks/showMatches',
+  async (data) => {
+    try {
+      return await axios.post(`http://0.0.0.0:9001/api/tasks/show_matches`, {data})
+        .then(response => response.data)
+        .then(data => data)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+);
 
 
 
@@ -81,6 +94,13 @@ const tasksSlice = createSlice({
       //state.tasks = payload;
     },
     [removeTask.rejected]: (state, action) => { },
+    /////
+    [showMatches.pending]: (state, action) => { state.status = 'loading'; },
+    [showMatches.fulfilled]: (state, { payload }) => {
+      state.status = 'resolved';
+      state.allCompletedTasks = payload;
+    },
+    [showMatches.rejected]: (state, action) => { },
     /////
   },
 });

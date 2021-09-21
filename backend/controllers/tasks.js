@@ -31,8 +31,8 @@ exports.getCompletedTasksForDays = async (req, res, next) => {
     const startDate = req.body.sd,
         endDate = req.body.ed,
         id = req.body.id;
-    
-    
+
+
     try {
         const tasks = await sequelize.query(`
             SELECT * FROM "Tasks"
@@ -49,14 +49,31 @@ exports.getCompletedTasksForDays = async (req, res, next) => {
 
 exports.removeTask = async (req, res, next) => {
     const id = req.body.id
-    
+
     try {
         await sequelize.query(`
             DELETE FROM "Tasks"
                 WHERE "Tasks".id = '${id}'
         `);
-        
+
         res.end()
+
+    } catch (error) {
+        console.log(error.message)
+    }
+};
+
+
+exports.showMatches = async (req, res, next) => {
+    let data = req.body.data;
+
+    try {
+        const tasks = await sequelize.query(`
+            SELECT * FROM "Tasks"
+            WHERE "Tasks".memo LIKE '%${data}%'
+        `);
+
+        res.json(tasks[0])
 
     } catch (error) {
         console.log(error.message)

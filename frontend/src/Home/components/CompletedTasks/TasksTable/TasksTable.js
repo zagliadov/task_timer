@@ -76,10 +76,11 @@ const TasksTable = ({ allCompletedTasks, setUpdate, update }) => {
                 })}
             </div>
 
-            <span className={total__time}>
-                <p>Total elapsed time</p>
+            <div className={total__time}>
+                <p>Total elapsed time:</p>
                 <span>{zero(hour)}:{zero(minutes)}:{zero(seconds)} </span>
-            </span>
+            </div>
+            
         </div>
     );
 };
