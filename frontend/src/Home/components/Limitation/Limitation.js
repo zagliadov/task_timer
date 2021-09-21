@@ -58,7 +58,11 @@ const Limitation = ({ start }) => {
                 </p>
                 <input type='number'
                     min='0' max='24'
-                    onChange={(e) => dispatch(setTimeLimit(e.target.value))} />
+                    defaultValue={localStorage.getItem('timeLimit')}
+                    onChange={(e) => {
+                        dispatch(setTimeLimit(e.target.value));
+                        localStorage.setItem('timeLimit', e.target.value)
+                    }} />
                 <div>
                     <h3>This feature is under development.</h3>
                 </div>

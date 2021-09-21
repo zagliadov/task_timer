@@ -107,9 +107,9 @@ const Home = () => {
     }, [dispatch, user.id, start])
 
     useEffect(() => {
-
+        
     }, [timeLimit])
-
+ 
 
     let getTime = (h, m, s) => {
         //Собирает значения полей времени в обьект
