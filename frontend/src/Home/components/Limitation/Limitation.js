@@ -6,16 +6,13 @@ import { setTimeLimit } from '../../../features/Timer/timerSlice';
 
 const Limitation = ({ start }) => {
 
-    //const [timeLimit, setTimeLimit] = useState(null);
     const dispatch = useDispatch();
     const tasks = useSelector(state => state.tasks.tasks);
     let timeLimit = useSelector(state => state.timer.timeLimit);
-    const { danger, lite } = classes;
+    const { danger, lite, input_timeLimit, wrapper_input_timeLimit } = classes;
     let hour = 0,
         minutes = 0,
         seconds = 0;
-
-
 
 
     let countTotalTime = (item) => {
@@ -56,13 +53,18 @@ const Limitation = ({ start }) => {
                     Upon expiration of the time limit, you will be asked whether to continue
                     or stop the task execution timer
                 </p>
-                <input type='number'
+                <div className={wrapper_input_timeLimit}>
+                     <input type='number'
                     min='0' max='24'
+                    className={input_timeLimit}
                     defaultValue={localStorage.getItem('timeLimit')}
                     onChange={(e) => {
                         dispatch(setTimeLimit(e.target.value));
                         localStorage.setItem('timeLimit', e.target.value)
                     }} />
+                    <span>Enter time limit</span>
+                </div>
+               
                 <div>
                     <h3>This feature is under development.</h3>
                 </div>
