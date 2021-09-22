@@ -61,6 +61,7 @@ const Limitation = ({ start }) => {
                     onChange={(e) => {
                         dispatch(setTimeLimit(e.target.value));
                         localStorage.setItem('timeLimit', e.target.value)
+                        
                     }} />
                     <span>Enter time limit</span>
                 </div>
@@ -70,7 +71,7 @@ const Limitation = ({ start }) => {
                 </div>
                 <div>
                     <p>Total elapsed time</p>
-                    <span className={(hour >= +timeLimit) ? danger : lite}>
+                    <span className={(+localStorage.getItem('hour') >= +localStorage.getItem('timeLimit')) ? danger : lite}>
                         {zero(hour)}:{zero(minutes)}:{zero(seconds)}
                     </span>
                     {(hour >= +timeLimit) ? <span> You have exceeded the time limit</span> : null}

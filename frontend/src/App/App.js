@@ -19,6 +19,8 @@ const App = () => {
     if(user.length === 0) {
       dispatch(verifyToken(localStorage.getItem('token')));
     }
+    if(!localStorage.getItem('hour')) return
+    localStorage.removeItem('hour');
   }, [dispatch, user.length]);
 
 

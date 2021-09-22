@@ -15,7 +15,6 @@ import { zero } from '../features/utils/utils';
 const Home = () => {
     const user = useSelector(state => state.user.user);
     const dispatch = useDispatch();
-    const timeLimit = useSelector(state => state.timer.timeLimit);
     const [start, setStart] = useState(false); // Отображение кнопки play pause
     const [noMemo, setNoMemo] = useState(false);
     let [click, setClick] = useState(0); // Сколько раз пользователь нажал плей без указания memo
@@ -37,7 +36,7 @@ const Home = () => {
     let hour = 0,
         minute = 0,
         second = 0;
-        
+
     let countTotalTime = (item) => {
         item.forEach(task => {
             if (task.hours === 0) return
@@ -56,19 +55,17 @@ const Home = () => {
             }
 
         })
+        if (hour === 0) return
+        localStorage.setItem('hour', hour)
     }
+    countTotalTime(tasks);
 
-    countTotalTime(tasks)
-
-
-
-
-
+    useEffect(() => {
+       
+    }, [hour,])
 
 
-
-
-
+    
 
     const timer = useRef(null);
     let tick = () => {
@@ -84,15 +81,15 @@ const Home = () => {
 
     let timeFrameControl = (seconds, minutes, hours) => {
         //Ф. не дает выйти за рамки 60 секунд, минут, часов
-        if (seconds > 60) {
+        if (seconds > 59) {
             setSeconds(0)
             setMinutes(minutes => +minutes + 1)
         }
-        if (minutes > 60) {
+        if (minutes > 59) {
             setMinutes(0)
             setHours(hours => +hours + 1)
         }
-        if (hours > 60) {
+        if (hours > 59) {
             setHours(0)
         }
     }
@@ -106,10 +103,6 @@ const Home = () => {
         dispatch(getTasks(user.id))
     }, [dispatch, user.id, start])
 
-    useEffect(() => {
-        
-    }, [timeLimit])
- 
 
     let getTime = (h, m, s) => {
         //Собирает значения полей времени в обьект
@@ -234,7 +227,7 @@ const Home = () => {
                 <div className={classes.form_wrapper}>
                     <div className={classes.timer_wrapper}>
                         <section className={classes.timer_hours}>
-                            <span className={(hour >= +timeLimit) ? classes.danger : null}>
+                            <span className={(+localStorage.getItem('hour') >= +localStorage.getItem('timeLimit')) ? classes.danger : null}>
                                 {zero(hours)}
                             </span>
                             <span>Hours</span>
@@ -243,14 +236,14 @@ const Home = () => {
                             <span>:</span>
                         </div>
                         <section className={classes.timer_minutes}>
-                            <span className={(hour >= +timeLimit) ? classes.danger : null}>{zero(minutes)}</span>
+                            <span className={(+localStorage.getItem('hour') >= +localStorage.getItem('timeLimit')) ? classes.danger : null}>{zero(minutes)}</span>
                             <span>Minutes</span>
                         </section>
                         <div className={classes.divider}>
                             <span>:</span>
                         </div>
                         <section className={classes.timer_seconds}>
-                            <span className={(hour >= +timeLimit) ? classes.danger : null}>{zero(seconds)}</span>
+                            <span className={(+localStorage.getItem('hour') >= +localStorage.getItem('timeLimit')) ? classes.danger : null}>{zero(seconds)}</span>
                             <span>Seconds</span>
                         </section>
                         <section className={classes.timer_button}>
