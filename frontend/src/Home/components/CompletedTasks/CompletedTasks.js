@@ -29,8 +29,8 @@ const CompletedTasks = () => {
 
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
-    const [sd, setSd] = useState('');
-    const [ed, setEd] = useState('');
+    const [convertedStartDate, setConvertedStartDate] = useState('');
+    const [convertedEndDate, setConvertedEndDate] = useState('');
     const [getStartDate, setGetStartDate] = useState(true);
     const [getEndDate, setGetEndDate] = useState(false);
     const [startDateDisplay, setStartDateDisplay] = useState(false); //date
@@ -44,14 +44,14 @@ const CompletedTasks = () => {
 
 
     useEffect(() => {
-        setSd(`${startDate.getFullYear()}-${zero(startDate.getMonth() + 1)}-${zero(startDate.getDate())}`);
-        setEd(`${endDate.getFullYear()}-${zero(endDate.getMonth() + 1)}-${zero(endDate.getDate())}`);
+        setConvertedStartDate(`${startDate.getFullYear()}-${zero(startDate.getMonth() + 1)}-${zero(startDate.getDate())}`);
+        setConvertedEndDate(`${endDate.getFullYear()}-${zero(endDate.getMonth() + 1)}-${zero(endDate.getDate())}`);
 
     }, [startDate, endDate])
 
     useEffect(() => {
-        dispatch(getCompletedTasksForDays({ sd, ed, id: user.id }))
-    }, [update, dispatch, ed, sd, user.id])
+        dispatch(getCompletedTasksForDays({ convertedStartDate, convertedEndDate, id: user.id }))
+    }, [update, dispatch, convertedEndDate, convertedStartDate, user.id])
 
     return (
         <div className={root}>
@@ -64,7 +64,7 @@ const CompletedTasks = () => {
                         <div className={wrapper_input_for_iterating_over_letters}>
                             <input type='text'
                                 className={input_for_iterating_over_letters}
-                                onChange={(e) => dispatch(showMatches(e.target.value))} />
+                                onChange={(e) => dispatch(showMatches({data: e.target.value, convertedStartDate, convertedEndDate, id: user.id}))} />
                             <span>Display a specific tasks</span>
                         </div>
 
@@ -101,9 +101,9 @@ const CompletedTasks = () => {
                             : <h2>Select date</h2>
                     }
                     <div className={date__display}>
-                        {startDateDisplay && <p>{sd}</p>}
+                        {startDateDisplay && <p>{convertedStartDate}</p>}
                         {endDateDisplay && <p>-</p>}
-                        {endDateDisplay && <p>{ed}</p>}
+                        {endDateDisplay && <p>{convertedEndDate}</p>}
                         {startDateDisplay &&
                             <button className={change_date}
                                 onClick={() => {
@@ -158,7 +158,7 @@ const CompletedTasks = () => {
                 <button className={display__button}
                     onClick={() => {
                         setDisplayData(true)
-                        dispatch(getCompletedTasksForDays({ sd, ed, id: user.id }))
+                        dispatch(getCompletedTasksForDays({ convertedStartDate, convertedEndDate, id: user.id }))
                     }}>
                     Display
                 </button>

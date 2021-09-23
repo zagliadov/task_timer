@@ -112,3 +112,6 @@ const tasksSlice = createSlice({
 
 
 export default tasksSlice.reducer;
+
+
+// React, Redux/Redux toolkit, expressjs, nodejs, postgresql, mongodb, docker, sass

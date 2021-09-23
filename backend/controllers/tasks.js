@@ -28,15 +28,15 @@ exports.getTasks = async (req, res, next) => {
 };
 
 exports.getCompletedTasksForDays = async (req, res, next) => {
-    const startDate = req.body.sd,
-        endDate = req.body.ed,
+    const convertedStartDate = req.body.convertedStartDate,
+        convertedEndDate = req.body.convertedEndDate,
         id = req.body.id;
 
 
     try {
         const tasks = await sequelize.query(`
             SELECT * FROM "Tasks"
-            WHERE "userId" = ${id} AND "createdAt" BETWEEN '${startDate}' AND '${endDate}'
+            WHERE "userId" = ${id} AND "createdAt" BETWEEN '${convertedStartDate}' AND '${convertedEndDate}'
             ORDER BY "createdAt" ASC;
         `);
         res.json(tasks[0])
@@ -65,14 +65,28 @@ exports.removeTask = async (req, res, next) => {
 
 
 exports.showMatches = async (req, res, next) => {
-    let data = req.body.data;
+    let data = req.body.data.data,
+        convertedStartDate = req.body.data.convertedStartDate,
+        id = req.body.data.id,
+        convertedEndDate = req.body.data.convertedEndDate;
+
 
     try {
+        if (!data) {
+            const tasks = await sequelize.query(`
+                SELECT * FROM "Tasks"
+                WHERE "createdAt" BETWEEN '${convertedStartDate}' AND '${convertedEndDate}' AND "userId" = ${id}
+                ORDER BY "createdAt" ASC;
+            `);
+        }
         const tasks = await sequelize.query(`
             SELECT * FROM "Tasks"
-            WHERE "Tasks".memo LIKE '%${data}%'
+            WHERE "Tasks".memo LIKE '%${data}%' AND "createdAt" BETWEEN '${convertedStartDate}' AND '${convertedEndDate}' AND "userId" = ${id}
+            ORDER BY "createdAt" ASC;
         `);
-        res.json(tasks[0])
+        
+        if (tasks.length === 0) return
+        res.status(200).json(tasks[0])
 
     } catch (error) {
         console.log(error.message)
