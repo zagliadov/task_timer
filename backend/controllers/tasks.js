@@ -72,7 +72,6 @@ exports.showMatches = async (req, res, next) => {
             SELECT * FROM "Tasks"
             WHERE "Tasks".memo LIKE '%${data}%'
         `);
-
         res.json(tasks[0])
 
     } catch (error) {

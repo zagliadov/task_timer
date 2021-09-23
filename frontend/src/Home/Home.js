@@ -111,6 +111,7 @@ const Home = () => {
             minutes: m,
             seconds: s,
         }
+        
     }
     const resetTimer = () => {
         setSeconds(0);
