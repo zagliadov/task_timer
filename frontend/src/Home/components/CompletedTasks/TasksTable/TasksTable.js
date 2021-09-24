@@ -31,6 +31,7 @@ const TasksTable = ({ allCompletedTasks, setUpdate, update }) => {
         )
     }
     let countTotalTime = (item) => {
+        if( !item ) return
         item.forEach(task => {
             if (task.hours === 0) return
             hour += +task.hours

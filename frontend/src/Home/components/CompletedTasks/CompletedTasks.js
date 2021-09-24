@@ -28,7 +28,7 @@ const CompletedTasks = () => {
 
 
     const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const [rawEndDate, setRawEndDate] = useState(new Date());
     const [convertedStartDate, setConvertedStartDate] = useState('');
     const [convertedEndDate, setConvertedEndDate] = useState('');
     const [getStartDate, setGetStartDate] = useState(true);
@@ -45,9 +45,9 @@ const CompletedTasks = () => {
 
     useEffect(() => {
         setConvertedStartDate(`${startDate.getFullYear()}-${zero(startDate.getMonth() + 1)}-${zero(startDate.getDate())}`);
-        setConvertedEndDate(`${endDate.getFullYear()}-${zero(endDate.getMonth() + 1)}-${zero(endDate.getDate())}`);
+        setConvertedEndDate(`${rawEndDate.getFullYear()}-${zero(rawEndDate.getMonth() + 1)}-${zero(rawEndDate.getDate())}`);
 
-    }, [startDate, endDate])
+    }, [startDate, rawEndDate])
 
     useEffect(() => {
         dispatch(getCompletedTasksForDays({ convertedStartDate, convertedEndDate, id: user.id }))
@@ -132,14 +132,14 @@ const CompletedTasks = () => {
                                 selectsStart
                                 placeholderText="Start"
                                 startDate={startDate}
-                                endDate={endDate} />
+                                endDate={rawEndDate} />
                             : null}
 
                         {getEndDate ?
                             <DatePicker
                                 className={date__picker_end}
                                 onChange={(date) => {
-                                    setEndDate(date);
+                                    setRawEndDate(date);
                                     setEndDateDisplay(true)
                                     setGetStartDate(false)
                                     setGetEndDate(false)
@@ -148,7 +148,7 @@ const CompletedTasks = () => {
                                 dateFormat="yyyy-MM-dd"
                                 selectsEnd
                                 startDate={startDate}
-                                endDate={endDate} />
+                                endDate={rawEndDate} />
                             : null
                         }
                     </div>

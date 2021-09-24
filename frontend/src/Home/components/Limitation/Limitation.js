@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './limitation.module.sass';
 import { useSelector, useDispatch } from 'react-redux';
 import { zero } from '../../../features/utils/utils';
@@ -7,15 +7,16 @@ import { setTimeLimit } from '../../../features/Timer/timerSlice';
 const Limitation = ({ start }) => {
 
     const dispatch = useDispatch();
+    const [hasTimeFrameChanged, setHasTimeFrameChanged] = useState(false);
     const tasks = useSelector(state => state.tasks.tasks);
-    let timeLimit = useSelector(state => state.timer.timeLimit);
     const { danger, lite, input_timeLimit, wrapper_input_timeLimit } = classes;
-    let hour = 0,
-        minutes = 0,
-        seconds = 0;
+    let hour = 0 || 1,
+        minutes = 0 || 1,
+        seconds = 0 || 1;
 
 
     let countTotalTime = (item) => {
+       if(item === null) return
         item.forEach(task => {
             if (task.hours === 0) return
             hour += +task.hours
@@ -33,16 +34,23 @@ const Limitation = ({ start }) => {
             }
 
         })
+        localStorage.setItem('hour', hour)
     }
     /**React Hook useEffect has a complex expression in the dependency array.
      * Extract it to a separate variable so it can be statically checked  
      * react-hooks/exhaustive-deps 
      */
+    let timeLimit = localStorage.getItem('timeLimit');
     let expdep = !start;
     useEffect(() => {
 
-    }, [expdep, start])
-    countTotalTime(tasks)
+    }, [expdep, start, hour, timeLimit])
+    // if(!start) return
+    // if(!tasks) return
+     countTotalTime(tasks)
+  
+
+
 
     return (
         <div className={classes.option_wrapper}>
@@ -55,10 +63,11 @@ const Limitation = ({ start }) => {
                 </p>
                 <div className={wrapper_input_timeLimit}>
                      <input type='number'
-                    min='0' max='24'
-                    className={input_timeLimit}
-                    defaultValue={localStorage.getItem('timeLimit')}
+                    min='1' max='24'
+                    className={(input_timeLimit)}
+                    defaultValue={localStorage.getItem('timeLimit') || 3}
                     onChange={(e) => {
+                        setHasTimeFrameChanged(!hasTimeFrameChanged);
                         dispatch(setTimeLimit(e.target.value));
                         localStorage.setItem('timeLimit', e.target.value)
                         
@@ -71,10 +80,10 @@ const Limitation = ({ start }) => {
                 </div>
                 <div>
                     <p>Total elapsed time</p>
-                    <span className={(+localStorage.getItem('hour') >= +localStorage.getItem('timeLimit')) ? danger : lite}>
+                    <span className={parseInt(localStorage.getItem('hour')) >= parseInt(localStorage.getItem('timeLimit')) ? danger : lite}>
                         {zero(hour)}:{zero(minutes)}:{zero(seconds)}
                     </span>
-                    {(hour >= +timeLimit) ? <span> You have exceeded the time limit</span> : null}
+                    {(parseInt(localStorage.getItem('hour')) >= parseInt(localStorage.getItem('timeLimit'))) ? <span> You have exceeded the time limit</span> : null}
                 </div>
 
             </section>
