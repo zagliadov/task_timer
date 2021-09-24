@@ -59,9 +59,10 @@ exports.removeTask = async (req, res, next) => {
                 WHERE "Tasks".id = '${id}'
         `);
 
-        res.send(500).end()
+        res.status(200).end()
 
     } catch (error) {
+        res.status(500);
         console.log(error.message)
     }
 };
