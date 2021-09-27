@@ -19,23 +19,57 @@ const Home = () => {
     const [noMemo, setNoMemo] = useState(false);
     let [click, setClick] = useState(0); // Сколько раз пользователь нажал плей без указания memo
     let memo = useRef('');
-    let [saveData, setSaveData] = useState(true)
+    let [saveData, setSaveData] = useState(true);
     let timeStamp = {};
     let [seconds, setSeconds] = useState(0);
     let [minutes, setMinutes] = useState(0);
     let [hours, setHours] = useState(0);
-    let mydate = moment().format()
+    let mydate = moment().format();
     let weekDayName = moment(mydate).format('dddd');
     let date = new Date();
-    let day = transformTime(date.getDate())
+    let day = transformTime(date.getDate());
     let month = moment().format('MMMM');
-    let tasks = useSelector(state => state.tasks.tasks)
+    let tasks = useSelector(state => state.tasks.tasks);
+
+
+
+    let hour = 0,
+        minute = 0,
+        second = 0;
+
+    let countTotalTime = (item) => {
+        if (!item) return
+        item.forEach(task => {
+            if (task.hours === 0) return
+            hour += parseInt(task.hours)
+            if (task.minutes === 0) return
+            minute += parseInt(task.minutes)
+            if (task.seconds === 0) return
+            second += parseInt(task.seconds)
+            while (second > 60) {
+                minute++;
+                second -= 60;
+            }
+            while (minute >= 60) {
+                hour++;
+                minute -= 60
+            }
+
+        })
+        if (hour === 0) return
+        localStorage.setItem('hour', hour)
+    }
+    countTotalTime(tasks);
+
+
 
     const timer = useRef(null);
     let tick = () => {
         //Запускает и оставнавливает счетчик
         if (!timer.current) {
-            timer.current = setInterval(() => setSeconds(seconds => +seconds + 1), 1000)
+            timer.current = setInterval(() => {
+                setSeconds(seconds => +seconds + 1);
+            }, 1)
 
         } else {
             clearInterval(timer.current);
@@ -43,28 +77,32 @@ const Home = () => {
         }
     }
 
+
+
     let timeFrameControl = (seconds, minutes, hours) => {
         //Ф. не дает выйти за рамки 60 секунд, минут, часов
-        if (seconds > 60) {
+        if (seconds > 59) {
             setSeconds(0)
             setMinutes(minutes => +minutes + 1)
         }
-        if (minutes > 60) {
+        if (minutes > 59) {
             setMinutes(0)
             setHours(hours => +hours + 1)
         }
-        if (hours > 60) {
+        if (hours > 59) {
             setHours(0)
         }
     }
 
     useEffect(() => {
-        timeFrameControl(+seconds, +minutes, +hours)
+        timeFrameControl(+seconds, +minutes, +hours);
     }, [seconds, minutes, hours]);
 
     useEffect(() => {
-        dispatch(getTasks(user.id))
+        if (typeof (user.id) === 'undefined') return
+        dispatch(getTasks(user.id));
     }, [dispatch, user.id, start])
+
 
     let getTime = (h, m, s) => {
         //Собирает значения полей времени в обьект
@@ -73,6 +111,7 @@ const Home = () => {
             minutes: m,
             seconds: s,
         }
+
     }
     const resetTimer = () => {
         setSeconds(0);
@@ -87,13 +126,13 @@ const Home = () => {
          * и если они идентичны продолжаешь считать время, если нет сбрасывает время
          * и пишет новое memo
          */
-        if (!user.role) return // Если пользователь авторизован
+        if (!user.role) return; // Если пользователь авторизован
         //Увеличиваем клик для визуального оформления
         setClick(++click);
-        if (memo.current.value.length === 0) setNoMemo(true) // Показываем Error что не указан memo
+        if (memo.current.value.length === 0) setNoMemo(true);// Показываем Error что не указан memo
         if (memo.current.value.length > 0) {
-            setNoMemo(false)
-            setClick(0)
+            setNoMemo(false);
+            setClick(0);
         }  // Убираем Error если memo указан
         if (memo.current.value.length === 0) return  // Если memo не указан не запускаем счетчик
         setStart(true); // Отображение кнопки pause
@@ -104,7 +143,7 @@ const Home = () => {
             resetTimer();
             // Если memo поменялось делаем возможным новую запись в базу
         }
-        localStorage.setItem('memo', memo.current.value)
+        localStorage.setItem('memo', memo.current.value);
     }
 
     const handlePause = () => {
@@ -135,7 +174,7 @@ const Home = () => {
                     memo: localStorage.getItem('oldmemo'),
                     usid: user.id,
                     taskId: id[0].id,
-                }))
+                }));
             } else {
                 /**
                  * Если memo из фильтра нет, значит записи в базе о задаче нет
@@ -143,14 +182,17 @@ const Home = () => {
                  * Флаг saveData true saveTaskPackage возможен
                  * Переводим флаг saveData в false
                  */
-                dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
-                setSaveData(false)
+                if (user.id) {
+                    dispatch(saveTaskPackage({ timeStamp, id: user.id }))//Запись в базу новых данных только через saveData(true)
+                    setSaveData(false)
+                }
             }
         } else {
             /**
              * если saveData true делаем новую запись в базе/ saveData делаем false
              * В массиве tasks находим memo равное значению из инпута
              */
+            if (!tasks) return
             let id = tasks.filter(task => {
                 return task.memo === memo.current.value
             })
@@ -194,14 +236,18 @@ const Home = () => {
                             <span>:</span>
                         </div>
                         <section className={classes.timer_minutes}>
-                            <span>{zero(minutes)}</span>
+                            <span>
+                                {zero(minutes)}
+                            </span>
                             <span>Minutes</span>
                         </section>
                         <div className={classes.divider}>
                             <span>:</span>
                         </div>
                         <section className={classes.timer_seconds}>
-                            <span>{zero(seconds)}</span>
+                            <span>
+                                {zero(seconds)}
+                            </span>
                             <span>Seconds</span>
                         </section>
                         <section className={classes.timer_button}>
@@ -231,6 +277,7 @@ const Home = () => {
                         }
                         ref={memo}
                         onChange={() => {
+                            if (!tasks) return
                             let id = tasks.filter(task => {
                                 return task.memo === memo.current.value
                             })

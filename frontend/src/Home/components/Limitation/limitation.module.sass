@@ -11,3 +11,31 @@
             color: $headerTimeLimit
         p
             color: $someText
+
+.danger
+    color: $rejected
+
+.lite
+    color: $someText
+
+.input_timeLimit
+    width: 50px
+    height: 50px
+    text-align: center
+    font-size: 26px
+    outline: none
+    color: $dominantColor
+    border-color: $dominantColor
+    border-radius: 50%
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button
+        display: none
+    &:focus
+        outline: none
+        caret-color: transparent
+        border-color: $inputOnHover
+
+.wrapper_input_timeLimit
+    display: flex
+    align-items: center
+    justify-content: space-evenly

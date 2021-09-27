@@ -2,8 +2,7 @@ import React, {useEffect} from 'react';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Wrapper from '../Wrapper/Wrapper';
-import Footer from '../Footer/Footer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { verifyToken } from '../features/Auth/userSlice';
 
 const App = () => {
@@ -11,20 +10,25 @@ const App = () => {
 
   
   const dispatch = useDispatch();
-
-
+  const user = useSelector(state => state.user.user)
+  
  
   useEffect(() => {
     if(!localStorage.getItem('token')) return;
     dispatch(verifyToken(localStorage.getItem('token')));
-  }, [dispatch]);
+    if(user.length === 0) {
+      dispatch(verifyToken(localStorage.getItem('token')));
+    }
+    if(!localStorage.getItem('hour')) return
+    localStorage.removeItem('hour');
+  }, [dispatch, user.length]);
 
 
   return (
     <Wrapper>
       <Header />
       <Main />
-      <Footer />
+     
     </Wrapper>
   );
 };

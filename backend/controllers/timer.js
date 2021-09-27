@@ -6,13 +6,14 @@ const sequelize = require('../sequelize/sequelize')
 
 exports.saveTaskPackage = async (req, res, next) => {
     const { hours, minutes, seconds, memo } = req.body.timeStamp;
-    const id = req.body.id
-    const date = req.body.date
+    const id = req.body.id;
+    const date = req.body.date;
     try {
         await sequelize.query(`
             INSERT INTO "Tasks"(hours, minutes, seconds, memo, "userId", picture, "createdAt")
                 VALUES('${hours}','${minutes}', '${seconds}', '${memo}', '${id}', '{}', '${date}')
            `)
+        res.status(201).end();
 
 
     } catch (error) {
@@ -23,9 +24,8 @@ exports.saveTaskPackage = async (req, res, next) => {
 
 
 exports.updateTime = async (req, res, next) => {
-    console.log(req.body)
-    const { hours, minutes, seconds, memo, usid, taskId, date } = req.body;
 
+    const { hours, minutes, seconds, memo, usid, taskId, date } = req.body;
 
     try {
         await sequelize.query(`
@@ -33,7 +33,7 @@ exports.updateTime = async (req, res, next) => {
         WHERE "memo" = '${memo}' AND "userId" = '${usid}' AND id = '${taskId}' AND "createdAt" = '${date}'
            `);
 
-        res.end()
+        res.status(200).end()
 
 
     } catch (error) {

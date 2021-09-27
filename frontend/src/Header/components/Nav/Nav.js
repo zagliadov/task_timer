@@ -3,6 +3,8 @@ import classes from './nav.module.sass';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 import { userRemove, tokenRemove } from '../../../features/Auth/userSlice'
+import { removeTimeLimit } from '../../../features/Timer/timerSlice'
+import { removeTasksFromState } from '../../../features/Tasks/tasksSlice';
 
 const Nav = () => {
 
@@ -11,9 +13,12 @@ const Nav = () => {
 
     const clean = () => {
         if (!localStorage.getItem('token')) return
-        localStorage.removeItem('token');
         dispatch(userRemove());
-        dispatch(tokenRemove())
+        dispatch(tokenRemove());
+        dispatch(removeTimeLimit());
+        localStorage.clear();
+        dispatch(removeTasksFromState());
+        
     }
     return (
         <nav className={classes.nav}>
@@ -27,11 +32,12 @@ const Nav = () => {
                 </>
                 :
                 <>
-                    <Link to='/signin' className={classes.link}>Sign In</Link>
+                    <Link to='/signin'
+                        className={classes.link}>Sign In</Link>
                     <Link to='/signup' className={classes.link} >Sign Up</Link>
                 </>
             }
-            <Link to='/somesome' className={classes.link}>Some</Link>
+
 
 
         </nav>

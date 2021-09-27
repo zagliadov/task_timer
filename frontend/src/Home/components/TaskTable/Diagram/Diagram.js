@@ -10,11 +10,17 @@ const Diagram = ({ tasks, start }) => {
     let [timer, setTimer] = useState([]);
     const user = useSelector(state => state.user.user);
 
-
+    /**
+     * React Hook useEffect has a complex expression in the dependency array. 
+     * Extract it to a separate variable so it can be statically 
+     * checked  react-hooks/exhaustive-deps/
+     */
+    let exdep = !start;
     useEffect(() => {
         if (!tasks) return
         chart();
-    }, [user, tasks, start]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user, tasks, start, exdep]);
 
     const chart = () => {
         let memo = [],
@@ -59,16 +65,14 @@ const Diagram = ({ tasks, start }) => {
 
     return (
         <div>
-
             <Doughnut
                 data={chartData}
-                height={200}
+                height={220}
                 width={400}
                 options={{
                     maintainAspectRatio: false,
                 }}
             />
-
         </div>
     );
 };

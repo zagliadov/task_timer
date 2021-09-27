@@ -3,13 +3,19 @@ import classes from './signup.module.sass';
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
 import { registration } from '../../features/Auth/userSlice';
+import { useHistory } from 'react-router-dom';
 
 const SignUp = () => {
 
     const dispatch = useDispatch();
+    const history = useHistory();
     const { register, handleSubmit } = useForm();
     const onSubmit = data => {
-        dispatch(registration(data))
+        dispatch(registration(data));
+        setTimeout(() => {
+            history.push('/signin')
+        }, 1000);
+
     };
 
 

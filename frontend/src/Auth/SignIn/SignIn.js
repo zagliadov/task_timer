@@ -22,6 +22,7 @@ const SignIn = () => {
         history.push('/')
     }, [dispatch, token, history])
 
+    
     return (
         <section className={classes.wrapper}>
             <h2>Sign In</h2>

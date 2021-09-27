@@ -1,0 +1,102 @@
+@import '../../../colors/colors.module.sass'
+
+.wrapper
+    display: flex
+    position: relative
+    h2
+        position: absolute
+        top: 10px
+        left: 0px
+        margin: 0
+
+
+.input__wrapper
+    width: 100%
+    height: auto
+
+.date__picker_start, .date__picker_end
+    position: absolute
+    top: -15px
+    right: 220px
+    outline: none
+    text-align: center
+    width: 50px
+    height: 50px
+    border-radius: 50%
+    border: 1px solid $inputAtRest
+    transition: 0.3s
+    &:hover
+        top: -25px
+        right: 200px
+        border-top: 1px solid $dominantColor
+        border-bottom: 1px solid $dominantColor
+        width: 70px
+        height: 70px
+
+.change_date
+    position: absolute
+    top: 50px
+    left: 0px
+    width: 170px
+    height: 40px
+    font-size: 17px
+    color: $buttonValue
+    border-radius: 5px
+    border: none
+    background-color: $buttonAtRest
+    &:hover
+        background-color: $buttonOnHover
+
+.date__display
+    display: flex
+    justify-content: space-around
+    position: absolute
+    bottom: -50px
+    left: 270px
+    width: 170px
+
+.display__button
+    position: absolute
+    bottom: -140px
+    right: 10px
+    width: 170px
+    height: 40px
+    border-radius: 5px
+    border: none
+    font-size: 20px
+    color: $buttonValue
+    background-color: $buttonAtRest
+    &:hover
+        background-color: $buttonOnHover
+
+.root
+    position: relative
+
+.select__other__dates_button
+    position: absolute
+    top: 0px
+    right: 30px
+    width: 170px
+    height: 40px
+    border-radius: 5px
+    border: none
+    font-size: 19px
+    color: $buttonValue
+    background-color: $buttonAtRest
+    &:hover
+        background-color: $buttonOnHover
+
+
+.dummy
+    position: absolute
+    width: 100%
+    font-size: 20px
+    padding: 70px 10px 0px 10px 
+
+.input_for_iterating_over_letters
+    font-size: 18px
+    width: 215px
+
+.wrapper_input_for_iterating_over_letters
+    display: flex
+    flex-direction: column
