@@ -2,6 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const sequelize = require('../sequelize/sequelize')
 
+
 exports.registration = async (req, res, next) => {
     const { firstname, lastname, email, date, password, role } = req.body;
     try {
@@ -17,7 +18,6 @@ exports.registration = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     const { email, password } = req.body;
-
     try {
         const user = await sequelize.query(`
         SELECT id, firstname, lastname, email, password, role FROM "Users"

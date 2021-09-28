@@ -1,9 +1,6 @@
 require('dotenv').config();
 const sequelize = require('../sequelize/sequelize')
 
-
-
-
 exports.saveTaskPackage = async (req, res, next) => {
     const { hours, minutes, seconds, memo } = req.body.timeStamp;
     const id = req.body.id;
