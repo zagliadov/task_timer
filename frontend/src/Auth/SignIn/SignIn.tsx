@@ -1,18 +1,18 @@
 import React, { useEffect, FC } from 'react';
 import classes from './signin.module.sass';
 import { useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from '../../features/store';
+import { useAppDispatch, useAppSelector, RootState } from '../../features/store';
 import { login, verifyToken } from '../../features/Auth/userSlice';
 import { useHistory } from 'react-router';
 import { ILogin } from '../../features/interfaces/interface';
+
 
 const SignIn: FC = () => {
 
     const dispatch = useAppDispatch();
     const { register, handleSubmit } = useForm();
-    const token = useAppSelector(state => state.user.token);
+    const token = useAppSelector((state: RootState) => state.user.token);
     const history = useHistory();
-    console.log(token)
 
     const onSubmit = (data: ILogin): void => {
         dispatch(login(data));

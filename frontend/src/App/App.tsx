@@ -9,27 +9,24 @@ import { RootState } from '../features/store';
 const App = () => {
 
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state: RootState) => state.user.user)
-
-
-  
+  const user = useAppSelector((state: RootState) => state.user.user) 
 
   useEffect(() => {
     if (!localStorage.getItem('token')) return;
     dispatch(verifyToken(localStorage.getItem('token')));
-    if (user.length === 0) {
+    if(Object.keys(user).length === 0) {
       dispatch(verifyToken(localStorage.getItem('token')));
     }
     if (!localStorage.getItem('hour')) return
     localStorage.removeItem('hour');
-  }, [dispatch, user.length]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 
   return (
     <Wrapper>
       <Header />
       <Main />
-
     </Wrapper>
   );
 };

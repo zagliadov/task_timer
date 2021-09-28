@@ -10,7 +10,7 @@ exports.registration = async (req, res, next) => {
        INSERT INTO "Users"(firstname, lastname, email, password, role, "createdAt", "updatedAt")
             VALUES('${firstname}','${lastname}', '${email}', '${password}', '${role}', '${date}', '${date}')
        `)
-       res.status(201).end();
+       res.status(201).json({message: 'User create'});
     } catch (error) {
         console.log(error.message)
     }

@@ -17,7 +17,7 @@ const SignUp: FC = () => {
         dispatch(registration(data));
         setTimeout(() => {
             history.push('/signin')
-        }, 1000);
+        }, 10);
     };
 
     return (
