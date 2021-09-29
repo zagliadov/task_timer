@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import {useEffect} from 'react';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Wrapper from '../Wrapper/Wrapper';
@@ -19,6 +19,9 @@ const App = () => {
     }
     if (!localStorage.getItem('hour')) return
     localStorage.removeItem('hour');
+    return () => {
+      console.log('Unmount app')
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

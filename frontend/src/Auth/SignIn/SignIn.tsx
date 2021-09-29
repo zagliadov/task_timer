@@ -1,4 +1,4 @@
-import React, { useEffect, FC } from 'react';
+import { useEffect, FC } from 'react';
 import classes from './signin.module.sass';
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector, RootState } from '../../features/store';

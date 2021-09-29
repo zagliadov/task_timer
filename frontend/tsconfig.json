@@ -14,6 +14,8 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
+    "noUnusedParameters": true, // ошибка если параметр не используется
+    "noUnusedLocals": true, // ошибка если локальная переменная не используется
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,

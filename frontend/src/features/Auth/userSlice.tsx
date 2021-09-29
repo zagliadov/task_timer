@@ -82,24 +82,24 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     userRemove(state, action) {
-      state.user = {};
+      state.user = action.payload;
     },
     tokenRemove(state, action) {
-      state.token = '';
+      state.token = action.payload;
     }
   },
 
   extraReducers: (builder) => {
     builder
-      .addCase(registration.pending, (state, action) => { state.status = 'loading'; })
-      .addCase(registration.fulfilled, (state, action) => {
+      .addCase(registration.pending, (state) => { state.status = 'loading'; })
+      .addCase(registration.fulfilled, (state) => {
         state.status = 'resolved';
         //state.data = payload;
       })
-      .addCase(registration.rejected, (state, action) => { });
+      .addCase(registration.rejected, () => { });
     ///////
     builder
-      .addCase(login.pending, (state, action) => { state.status = 'loading'; })
+      .addCase(login.pending, (state) => { state.status = 'loading'; })
       .addCase(login.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
         if (payload === undefined) state.message = true
@@ -107,15 +107,15 @@ const userSlice = createSlice({
         state.token = payload;
         if (payload !== undefined) localStorage.setItem('token', payload)
       })
-      .addCase(login.rejected, (state, action) => { });
+      .addCase(login.rejected, () => { });
     /////
     builder
-      .addCase(verifyToken.pending, (state, action) => { state.status = 'loading'; })
+      .addCase(verifyToken.pending, (state) => { state.status = 'loading'; })
       .addCase(verifyToken.fulfilled, (state, {payload}) => {
         state.status = 'resolved';
         state.user = payload;
       })
-      .addCase(verifyToken.rejected, (state, action) => { });
+      .addCase(verifyToken.rejected, () => { });
   },
 });
 

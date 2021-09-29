@@ -52,8 +52,8 @@ const timerSlice = createSlice({
     setTimeLimit(state, {payload}) {
       state.timeLimit = payload;
     },
-    removeTimeLimit(state, {payload}) {
-      state.timeLimit = 0;
+    removeTimeLimit(state, action) {
+      state.timeLimit = action.payload;
     }
    },
 

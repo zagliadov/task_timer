@@ -16,7 +16,7 @@ const Limitation = ({ start }) => {
 
 
     let countTotalTime = (item) => {
-       if(item === null) return
+       if(!item) return
         item.forEach(task => {
             if (task.hours === 0) return
             hour += +task.hours

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import classes from './signup.module.sass';
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from '../../features/store';
