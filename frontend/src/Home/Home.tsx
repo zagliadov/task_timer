@@ -2,17 +2,16 @@ import { useState, useEffect, useRef, FC } from 'react';
 import { useAppDispatch, useAppSelector } from '../features/store';
 import { RootState } from '../features/store';
 import classes from './home.module.sass';
-import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
-import { transformTime } from '../features/utils/utils';
 import { saveTaskPackage, updateTime } from '../features/Timer/timerSlice';
 import { getTasks } from '../features/Tasks/tasksSlice';
 import Options from './components/Options/Options';
 import Error from '../Error/Error';
-import { zero } from '../features/utils/utils';
 
-
+import TimerItem from './components/TimerItem/TimerItem';
+import Divider from './components/Divider/Divider';
+import HeadCurrentDate from './components/HeadCurrentDate/HeadCurrentDate';
 
 const Home: FC = () => {
 
@@ -55,12 +54,6 @@ const Home: FC = () => {
         [seconds, setSeconds] = useState<number>(0),
         [minutes, setMinutes] = useState<number>(0),
         [hours, setHours] = useState<number>(0);
-
-    let mydate: any = moment().format(),
-        weekDayName: any = moment(mydate).format('dddd'),
-        date: Date = new Date(),
-        day: string = transformTime(date.getDate().toString()),
-        month: any = moment().format('MMMM');
 
     let memo: any = useRef('');
     let timeStamp: any = {};
@@ -263,36 +256,19 @@ const Home: FC = () => {
 
     return (
         <div className={root}>
-            {user ? <h2>{weekDayName} {day}, {month}</h2> : <p>Hello</p>}
+            <HeadCurrentDate />
             {user &&
                 <div className={form_wrapper}>
                     <div className={timer_wrapper}>
-                        <section className={timer_hours}>
-                            <span>
-                                {zero(String(hours))}
-                            </span>
-                            <span>Hours</span>
-                        </section>
-                        <div className={divider}>
-                            <span>:</span>
-                        </div>
-                        <section className={timer_minutes}>
-                            <span>
-                                {zero(String(minutes))}
-                            </span>
-                            <span>Minutes</span>
-                        </section>
-                        <div className={divider}>
-                            <span>:</span>
-                        </div>
-                        <section className={timer_seconds}>
-                            <span>
-                                {zero(String(seconds))}
-                            </span>
-                            <span>Seconds</span>
-                        </section>
-                        <section className={timer_button}>
+                        <TimerItem propStyle={timer_hours} timeName={'Hours'} timeType={hours} />
+                        <Divider propStyle={divider} />
 
+                        <TimerItem propStyle={timer_minutes} timeName={'Minutes'} timeType={minutes} />
+                        <Divider propStyle={divider} />
+
+                        <TimerItem propStyle={timer_seconds} timeName={'Seconds'} timeType={seconds} />
+
+                        <section className={timer_button}>
                             {!start ?
                                 <FontAwesomeIcon icon={faPlay}
                                     className={timer_icons_play}

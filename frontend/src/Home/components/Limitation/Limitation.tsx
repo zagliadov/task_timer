@@ -2,10 +2,9 @@ import {FC, useEffect, useState } from 'react';
 import classes from './limitation.module.sass';
 import { useAppSelector, useAppDispatch } from '../../../features/store';
 import { RootState } from '../../../features/store';
-import { zero } from '../../../features/utils/utils';
 import { setTimeLimit } from '../../../features/Timer/timerSlice';
 import {IClasses} from '../../../features/interfaces/interface';
-
+import TotalElapsedTime from './components/TotalElapsedTime/TotalElapsedTime';
 
 type ILimitationProps = {
     start: boolean,
@@ -89,13 +88,7 @@ const Limitation: FC<ILimitationProps> = ({ start }) => {
                 <div>
                     <h3>This feature is under development.</h3>
                 </div>
-                <div>
-                    <p>Total elapsed time</p>
-                    <span className={Number(localStorage.getItem('hour')) >= Number(localStorage.getItem('timeLimit')) ? danger : lite}>
-                        {zero(String(hour))}:{zero(String(minutes))}:{zero(String(seconds))}
-                    </span>
-                    {(Number(localStorage.getItem('hour')) >= Number(localStorage.getItem('timeLimit'))) ? <span> You have exceeded the time limit</span> : null}
-                </div>
+                <TotalElapsedTime hour={hour} minutes={minutes} seconds={seconds} danger={danger} lite={lite} />
 
             </section>
 

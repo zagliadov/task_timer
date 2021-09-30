@@ -9,10 +9,6 @@ const Time: FC = () => {
     return (
         <div className={clock_wrapper}>
             <div className={clock}>
-                {/* <span>12</span>
-                    <span>3</span>
-                    <span>6</span>
-                    <span>9</span> */}
             </div>
         </div>
     );
