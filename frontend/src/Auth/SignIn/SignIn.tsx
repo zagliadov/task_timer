@@ -17,7 +17,6 @@ const SignIn: FC = () => {
     const onSubmit = (data: ILogin): void => {
         dispatch(login(data));
     };
-    
     useEffect(() => {
         if (!localStorage.getItem('token')) return;
         dispatch(verifyToken(localStorage.getItem('token')));

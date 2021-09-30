@@ -20,6 +20,13 @@ const Nav: FC = () => {
         localStorage.clear();
         dispatch(removeTasksFromState([]));
     }
+    const clearLocalStorage = (): void => {
+        /**
+         * Помогает избежать ошибку при которой переход по ссылке Sign In 
+         * невозможен из-за наличия токена в localStorage
+         */
+         localStorage.clear();
+    }
 
     return (
         <nav className={classes.nav}>
@@ -34,6 +41,7 @@ const Nav: FC = () => {
                 :
                 <>
                     <Link to='/signin'
+                        onClick={() => clearLocalStorage()} 
                         className={classes.link}>Sign In</Link>
                     <Link to='/signup' className={classes.link} >Sign Up</Link>
                 </>

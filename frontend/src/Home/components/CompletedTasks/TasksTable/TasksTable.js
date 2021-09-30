@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { zero } from '../../../../features/utils/utils'
 import classes from './taskstable.module.sass';
 import { useDispatch } from 'react-redux';

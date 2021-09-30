@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import classes from './limitation.module.sass';
 import { useSelector, useDispatch } from 'react-redux';
 import { zero } from '../../../features/utils/utils';

@@ -16,15 +16,11 @@ const initialState: ITaskSlice = {
 
 export const getTasks = createAsyncThunk(
   'tasks/getTasks',
-  async (id: number) => {
+  async (id: number | undefined) => {
     if (typeof (id) === 'undefined') return
     try {
       return await axios.get(`http://0.0.0.0:9001/api/tasks/get_tasks/${id}`)
         .then((response: AxiosResponse) => response.data)
-        .then((data: any) => {
-          console.log(data, 'getTasks')
-          return data
-        })
 
     } catch (error) {
       console.log(error)
@@ -81,11 +77,6 @@ export const showMatches = createAsyncThunk(
     }
   }
 );
-
-
-
-
-
 
 const tasksSlice = createSlice({
   name: 'tasks',
