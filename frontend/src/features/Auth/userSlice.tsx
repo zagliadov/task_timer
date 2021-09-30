@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import { transformTime } from '../utils/utils';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { createHmac } from 'crypto';
 import { IRegistration, ILogin } from '../interfaces/interface';
 
@@ -35,7 +35,7 @@ export const registration = createAsyncThunk(
     data.role = 'user';
     try {
       return await axios.post(`http://0.0.0.0:9001/api/auth/registration`, data)
-        .then(response => response.data)
+        .then((response: AxiosResponse) => response.data)
         .then((data: { message: string }) => console.log(data))
     } catch (error) {
       console.log(error)
@@ -49,7 +49,7 @@ export const login = createAsyncThunk(
     data.password = await createHmac('sha256', data.password).update('pass').digest('hex');
     try {
       return await axios.post(`http://0.0.0.0:9001/api/auth/login`, data)
-        .then(response => response.data)
+        .then((response: AxiosResponse) => response.data)
         .then(data => {
           if (!data) return
           return data
@@ -69,7 +69,7 @@ export const verifyToken = createAsyncThunk(
           'Authorization': `Bearer ${data}`
         }
       })
-        .then(response => response.data)
+        .then((response: AxiosResponse) => response.data)
         .then(data => data)
     } catch (error) {
       console.log(error)
