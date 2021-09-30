@@ -5,13 +5,20 @@ import { useAppDispatch } from '../../features/store';
 import { registration } from '../../features/Auth/userSlice';
 import { useHistory } from 'react-router-dom';
 import { IRegistration } from '../../features/interfaces/interface';
-
+import { IClasses } from '../../features/interfaces/interface';
 
 const SignUp: FC = () => {
 
     const dispatch = useAppDispatch();
     const history = useHistory();
     const { register, handleSubmit } = useForm();
+
+    const {
+        wrapper,
+        signup,
+        input__wrapper,
+        input__wrapper_submit,
+    }: IClasses = classes;
 
     const onSubmit = (data: IRegistration): void => {
         dispatch(registration(data));
@@ -21,29 +28,29 @@ const SignUp: FC = () => {
     };
 
     return (
-        <section className={classes.wrapper}>
+        <section className={wrapper}>
             <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit(onSubmit)} className={classes.signup}>
-                <section className={classes.input__wrapper}>
+            <form onSubmit={handleSubmit(onSubmit)} className={signup}>
+                <section className={input__wrapper}>
                     <label>Firstname: </label>
                     <input type='text' {...register("firstname", { required: true })} />
                 </section>
 
-                <section className={classes.input__wrapper}>
+                <section className={input__wrapper}>
                     <label>Lastname: </label>
                     <input type='text' {...register("lastname", { required: true })} />
                 </section>
 
-                <section className={classes.input__wrapper}>
+                <section className={input__wrapper}>
                     <label>Email: </label>
                     <input type='text' {...register("email", { required: true })} />
                 </section>
 
-                <section className={classes.input__wrapper}>
+                <section className={input__wrapper}>
                     <label>Password: </label>
                     <input type='text' {...register("password", { required: true })} />
                 </section>
-                <section className={classes.input__wrapper_submit}>
+                <section className={input__wrapper_submit}>
                     <input type='submit' />
                 </section>
 

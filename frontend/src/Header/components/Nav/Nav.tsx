@@ -6,11 +6,17 @@ import { removeTimeLimit } from '../../../features/Timer/timerSlice'
 import { removeTasksFromState } from '../../../features/Tasks/tasksSlice';
 import { RootState } from '../../../features/store';
 import { useAppSelector, useAppDispatch } from '../../../features/store';
+import {IClasses} from '../../../features/interfaces/interface';
 
 const Nav: FC = () => {
 
     const dispatch = useAppDispatch();
     const user = useAppSelector((state: RootState) => state.user.user);
+
+    const {
+        nav,
+        link,
+    }: IClasses = classes;
 
     const clean = (): void => {
         if (!localStorage.getItem('token')) return
@@ -29,11 +35,11 @@ const Nav: FC = () => {
     }
 
     return (
-        <nav className={classes.nav}>
+        <nav className={nav}>
             {(user.role === 'user' || user.role === 'admin') ?
                 <>
-                    <Link to='/' className={classes.link}
-                        onClick={() => {
+                    <Link to='/' className={link}
+                        onClick={(): void => {
                             clean()
                         }}
                     >Sign Out</Link>
@@ -41,9 +47,9 @@ const Nav: FC = () => {
                 :
                 <>
                     <Link to='/signin'
-                        onClick={() => clearLocalStorage()} 
-                        className={classes.link}>Sign In</Link>
-                    <Link to='/signup' className={classes.link} >Sign Up</Link>
+                        onClick={(): void => clearLocalStorage()} 
+                        className={link}>Sign In</Link>
+                    <Link to='/signup' className={link} >Sign Up</Link>
                 </>
             }
         </nav>

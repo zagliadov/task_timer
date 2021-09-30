@@ -12,32 +12,9 @@ import Options from './components/Options/Options';
 import Error from '../Error/Error';
 import { zero } from '../features/utils/utils';
 
+
+
 const Home: FC = () => {
-    const user = useAppSelector((state: RootState) => state.user.user),
-        tasks = useAppSelector((state: RootState) => state.tasks.tasks);
-    const dispatch = useAppDispatch();
-
-    const [start, setStart] = useState<boolean>(false), // Отображение кнопки play pause
-        [noMemo, setNoMemo] = useState<boolean>(false),
-        [saveData, setSaveData] = useState<boolean>(true);
-
-    let [click, setClick] = useState<number>(0), // Сколько раз пользователь нажал плей без указания memo
-        [seconds, setSeconds] = useState<number>(0),
-        [minutes, setMinutes] = useState<number>(0),
-        [hours, setHours] = useState<number>(0);
-
-    let mydate: any = moment().format(),
-        weekDayName: any = moment(mydate).format('dddd'),
-        date: Date = new Date(),
-        day: string = transformTime(date.getDate().toString()), 
-        month: any = moment().format('MMMM');
-
-    let memo: any = useRef('');
-    let timeStamp: any = {};
-
-    let hour: number = 0,
-        minute: number = 0,
-        second: number = 0;
 
     /************************************* */
     type ICurrent = {
@@ -58,17 +35,65 @@ const Home: FC = () => {
         minutes: number,
         seconds: number,
     }
+    type ITimeStamp = {
+        hours: number | string,
+        minutes: number | string,
+        seconds: number | string,
+        memo: string,
+    }
     /************************************* */
+
+    const user = useAppSelector((state: RootState) => state.user.user),
+        tasks = useAppSelector((state: RootState) => state.tasks.tasks);
+    const dispatch = useAppDispatch();
+
+    const [start, setStart] = useState<boolean>(false), // Отображение кнопки play pause
+        [noMemo, setNoMemo] = useState<boolean>(false),
+        [saveData, setSaveData] = useState<boolean>(true);
+
+    let [click, setClick] = useState<number>(0), // Сколько раз пользователь нажал плей без указания memo
+        [seconds, setSeconds] = useState<number>(0),
+        [minutes, setMinutes] = useState<number>(0),
+        [hours, setHours] = useState<number>(0);
+
+    let mydate: any = moment().format(),
+        weekDayName: any = moment(mydate).format('dddd'),
+        date: Date = new Date(),
+        day: string = transformTime(date.getDate().toString()),
+        month: any = moment().format('MMMM');
+
+    let memo: any = useRef('');
+    let timeStamp: any = {};
+
+    const {
+        root,
+        timer_wrapper,
+        timer_hours,
+        timer_minutes,
+        timer_seconds,
+        divider,
+        timer_button,
+        timer_icons_pause,
+        timer_icons_play,
+        form_wrapper,
+        inputMemo,
+        dificultCase,
+    } = classes;
+
+    let hour: number = 0,
+        minute: number = 0,
+        second: number = 0;
+
 
     let countTotalTime = (item: ITaks[] | []) => {
         if (!item) return
         item.forEach((task: ITaks) => {
-            if (parseInt(task.hours) === 0) return
-            hour += parseInt(task.hours)
-            if (parseInt(task.minutes) === 0) return
-            minute += parseInt(task.minutes)
-            if (parseInt(task.seconds) === 0) return
-            second += parseInt(task.seconds)
+            if (Number(task.hours) === 0) return
+            hour += Number(task.hours)
+            if (Number(task.minutes) === 0) return
+            minute += Number(task.minutes)
+            if (Number(task.seconds) === 0) return
+            second += Number(task.seconds)
             while (second > 60) {
                 minute++;
                 second -= 60;
@@ -79,7 +104,7 @@ const Home: FC = () => {
             }
         })
         if (hour === 0) return
-        localStorage.setItem('hour', hour.toString())
+        localStorage.setItem('hour', String(hour))
     }
     countTotalTime(tasks);
 
@@ -118,9 +143,6 @@ const Home: FC = () => {
     useEffect(() => {
         if (typeof (user.id) === 'undefined') return
         dispatch(getTasks(user.id));
-        return () => {
-            console.log('unmount dispatch')
-        }
     }, [dispatch, user.id, start])
 
     let getTime = (h: number, m: number, s: number): IGetTime => {
@@ -156,33 +178,26 @@ const Home: FC = () => {
         setStart(true); // Отображение кнопки pause
         tick(); // Запускает счетчик
 
-        if (memo.current.value !== localStorage.getItem('oldmemo')) {
+        if (String(memo.current.value) !== String(localStorage.getItem('oldmemo'))) {
             setSaveData(true); // Делаем true если мемо не совпадает
             resetTimer();
             // Если memo поменялось делаем возможным новую запись в базу
         }
         localStorage.setItem('memo', memo.current.value);
     }
-    // type IUpdateTime = {
-    //     hours: string,
-    //     minutes: string,
-    //     seconds: string,
-    //     memo: string,
-    //     usid: number,
-    //     taskId: number,
-    // }
+
     const handlePause = (): any => {
         tick();
         dispatch(getTasks(user.id))
         setStart(false); // Отображение кнопки play
         getTime(hours, minutes, seconds)
-        timeStamp.memo = memo.current.value
+        timeStamp.memo = String(memo.current.value)
         localStorage.setItem('timeStamp', JSON.stringify(timeStamp))
 
         //saveData по дефолту true
         if (!saveData) { //если false обновляем запись в базе
             let id: ITaks[] = tasks.filter((task: ITaks) => {
-                return task.memo === memo.current.value
+                return task.memo === String(memo.current.value)
             }) //В массиве tasks находим memo равное значению из инпута
             if (!id) return
             if (id[0]?.memo === localStorage.getItem('oldmemo')) {
@@ -228,7 +243,8 @@ const Home: FC = () => {
                  * парсим timeStamp из localStorage
                  * Запоняем новыми данными обьект и отправляем для обновления
                  */
-                let time: any = JSON.parse(localStorage.getItem('timeStamp') || '{}');
+
+                let time: ITimeStamp = JSON.parse(localStorage.getItem('timeStamp') || '');
                 return dispatch(updateTime({
                     hours: String(time.hours),
                     minutes: String(time.minutes),
@@ -246,47 +262,47 @@ const Home: FC = () => {
     }
 
     return (
-        <div className={classes.root}>
+        <div className={root}>
             {user ? <h2>{weekDayName} {day}, {month}</h2> : <p>Hello</p>}
             {user &&
-                <div className={classes.form_wrapper}>
-                    <div className={classes.timer_wrapper}>
-                        <section className={classes.timer_hours}>
+                <div className={form_wrapper}>
+                    <div className={timer_wrapper}>
+                        <section className={timer_hours}>
                             <span>
                                 {zero(String(hours))}
                             </span>
                             <span>Hours</span>
                         </section>
-                        <div className={classes.divider}>
+                        <div className={divider}>
                             <span>:</span>
                         </div>
-                        <section className={classes.timer_minutes}>
+                        <section className={timer_minutes}>
                             <span>
                                 {zero(String(minutes))}
                             </span>
                             <span>Minutes</span>
                         </section>
-                        <div className={classes.divider}>
+                        <div className={divider}>
                             <span>:</span>
                         </div>
-                        <section className={classes.timer_seconds}>
+                        <section className={timer_seconds}>
                             <span>
                                 {zero(String(seconds))}
                             </span>
                             <span>Seconds</span>
                         </section>
-                        <section className={classes.timer_button}>
+                        <section className={timer_button}>
 
                             {!start ?
                                 <FontAwesomeIcon icon={faPlay}
-                                    className={classes.timer_icons_play}
-                                    onClick={() => {
+                                    className={timer_icons_play}
+                                    onClick={(): void => {
                                         handlePlay()
                                     }} />
                                 :
                                 <FontAwesomeIcon icon={faPause}
-                                    className={classes.timer_icons_pause}
-                                    onClick={() => {
+                                    className={timer_icons_pause}
+                                    onClick={(): void => {
                                         handlePause()
                                     }} />
                             }
@@ -298,10 +314,10 @@ const Home: FC = () => {
 
                     <input type='text'
                         className={
-                            (click > 1) ? classes.dificultCase : classes.inputMemo
+                            (click > 1) ? dificultCase : inputMemo
                         }
                         ref={memo}
-                        onChange={() => {
+                        onChange={(): void | string => {
                             if (!tasks) return
                             let id: ITaks[] = tasks.filter((task: ITaks) => {
                                 return task.memo === String(memo.current.value)
@@ -309,7 +325,7 @@ const Home: FC = () => {
                             setHours(Number(id[0]?.hours) || 0)
                             setMinutes(Number(id[0]?.minutes) || 0)
                             setSeconds(Number(id[0]?.seconds) || 0)
-                            localStorage.setItem('oldmemo', memo.current.value)
+                            localStorage.setItem('oldmemo', String(memo.current.value))
                         }} />
                 </div>
             }
