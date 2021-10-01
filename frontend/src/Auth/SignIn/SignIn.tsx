@@ -4,10 +4,14 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector, RootState } from '../../features/store';
 import { login, verifyToken } from '../../features/Auth/userSlice';
 import { useHistory } from 'react-router';
-import { ILogin } from '../../features/interfaces/interface';
-import {IClasses} from '../../features/interfaces/interface';
+import { IClasses } from '../../features/interfaces/interface';
 
 const SignIn: FC = () => {
+
+    interface ILogin {
+        email: string;
+        password: string;
+    }
 
     const dispatch = useAppDispatch();
     const { register, handleSubmit } = useForm();
