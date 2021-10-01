@@ -6,7 +6,7 @@ interface ITimerSlice {
   package: [],
   task: [],
   timeLimit: number,
-  status: '' | 'loading' | 'resolved',
+  status: string,
 }
 
 const initialState: ITimerSlice = {
@@ -32,7 +32,7 @@ type IUpdateTime = {
   minutes: string,
   seconds: string,
   taskId: number,
-  usid: number | undefined ,
+  usid: number | undefined,
 }
 export const saveTaskPackage = createAsyncThunk(
   'user/saveTaskPackage',
@@ -42,6 +42,7 @@ export const saveTaskPackage = createAsyncThunk(
     try {
       return await axios.post(`http://0.0.0.0:9001/api/timer/add_task`, data)
         .then((response: AxiosResponse) => response.data)
+        .then((data: {message: string}) => data.message)
     } catch (error) {
       console.log(error)
     }
@@ -56,6 +57,7 @@ export const updateTime = createAsyncThunk(
       data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime((newDate.getMonth() + 1).toString())}-${transformTime(newDate.getDate().toString())}`
       return await axios.put(`http://0.0.0.0:9001/api/timer/update_time`, data)
         .then((response: AxiosResponse) => response.data)
+        .then((data: {message: string}) => data.message)
     } catch (error) {
       console.log(error)
     }
@@ -67,27 +69,27 @@ const timerSlice = createSlice({
   initialState,
   reducers: {
     setTimeLimit(state, { payload }) {
-      state.timeLimit = payload;
+      console.log(payload)
+      state.timeLimit = payload as number;
     },
-    removeTimeLimit(state, action) {
-      state.timeLimit = action.payload;
+    removeTimeLimit(state, { payload }) {
+      state.timeLimit = payload as number;
     }
   },
 
   extraReducers: (builder) => {
     builder
       .addCase(saveTaskPackage.pending, (state) => { state.status = 'loading'; })
-      .addCase(saveTaskPackage.fulfilled, (state, action) => {
-        state.status = 'resolved';
-        state.package = action.payload;
+      .addCase(saveTaskPackage.fulfilled, (state, { payload }) => {
+        console.log(payload)
+        state.status = payload as string ;
       })
       .addCase(saveTaskPackage.rejected, () => { });
     /////
     builder
       .addCase(updateTime.pending, (state) => { state.status = 'loading'; })
-      .addCase(updateTime.fulfilled, (state, action) => {
-        state.status = 'resolved';
-        state.package = action.payload;
+      .addCase(updateTime.fulfilled, (state, {payload}) => {
+        state.status = payload as string;
       })
       .addCase(updateTime.rejected, () => { });
   },

@@ -10,7 +10,7 @@ exports.saveTaskPackage = async (req, res, next) => {
             INSERT INTO "Tasks"(hours, minutes, seconds, memo, "userId", picture, "createdAt")
                 VALUES('${hours}','${minutes}', '${seconds}', '${memo}', '${id}', '{}', '${date}')
            `)
-        res.status(201).end();
+        res.status(201).json({message: 'resolved'});
 
 
     } catch (error) {
@@ -30,7 +30,7 @@ exports.updateTime = async (req, res, next) => {
         WHERE "memo" = '${memo}' AND "userId" = '${usid}' AND id = '${taskId}' AND "createdAt" = '${date}'
            `);
 
-        res.status(200).end()
+        res.status(200).json({message: 'resolved'})
 
 
     } catch (error) {
