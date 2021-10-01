@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosInstance } from 'axios';
 
 
 interface ITaskSlice {
@@ -19,7 +19,7 @@ export const getTasks = createAsyncThunk(
   async (id: number | undefined) => {
     if (typeof (id) === 'undefined') return
     try {
-      return await axios.get(`http://0.0.0.0:9001/api/tasks/get_tasks/${id}`)
+      return await axios.get<AxiosInstance>(`http://0.0.0.0:9001/api/tasks/get_tasks/${id}`)
         .then((response: AxiosResponse) => response.data)
 
     } catch (error) {
@@ -37,7 +37,7 @@ export const getCompletedTasksForDays = createAsyncThunk(
   'tasks/getCompletedTasksForDays',
   async (data: IGetCompletedTasksForDays) => {
     try {
-      return await axios.post(`http://0.0.0.0:9001/api/tasks/get_completed_tasks`, data)
+      return await axios.post<AxiosInstance>(`http://0.0.0.0:9001/api/tasks/get_completed_tasks`, data)
         .then((response: AxiosResponse) => response.data)
         .then((data: any) => {
           return data
@@ -53,7 +53,7 @@ export const removeTask = createAsyncThunk(
   'tasks/removeTask',
   async (data: any) => {
     try {
-      return await axios.delete(`http://0.0.0.0:9001/api/tasks/remove_task`, { data })
+      return await axios.delete<AxiosInstance>(`http://0.0.0.0:9001/api/tasks/remove_task`, { data })
         .then((response: AxiosResponse) => response.data)
         .then((data: any) => data)
 
@@ -68,7 +68,7 @@ export const showMatches = createAsyncThunk(
   async (data: any) => {
 
     try {
-      return await axios.post(`http://0.0.0.0:9001/api/tasks/show_matches`, { data })
+      return await axios.post<AxiosInstance>(`http://0.0.0.0:9001/api/tasks/show_matches`, { data })
         .then((response: AxiosResponse) => response.data)
         .then((data: any) => data)
 

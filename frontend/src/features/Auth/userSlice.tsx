@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { transformTime } from '../utils/utils';
-import axios, { AxiosResponse, AxiosTransformer, AxiosInstance } from 'axios';
+import axios, { AxiosResponse, AxiosTransformer } from 'axios';
 import { createHmac } from 'crypto';
 import { IRegistration } from '../interfaces/interface';
 
@@ -37,9 +37,9 @@ export const registration = createAsyncThunk(
     data.password = await createHmac('sha256', data.password).update('pass').digest('hex');
     data.role = 'user';
     try {
-      return await axios.post(`http://0.0.0.0:9001/api/auth/registration`, data)
+      return await axios.post<string>(`http://0.0.0.0:9001/api/auth/registration`, data)
         .then((response: AxiosResponse) => response.data)
-        .then((data: { message: string }) => console.log(data))
+        .then((data: { message: string }) => data.message)
     } catch (error) {
       console.log(error)
     }
@@ -60,7 +60,7 @@ export const login = createAsyncThunk(
   async (data: ILogin) => {
     data.password = await createHmac('sha256', data.password).update('pass').digest('hex');
     try {
-      return await axios.post<AxiosInstance>(`http://0.0.0.0:9001/api/auth/login`, data)
+      return await axios.post<string>(`http://0.0.0.0:9001/api/auth/login`, data)
         .then((response: AxiosResponse) => response.data)
         .then((data: IDataLogin) => {
           if (!data) return
@@ -80,14 +80,13 @@ export const verifyToken = createAsyncThunk(
   'user/verifyToken',
   async (data: string | null) => {
     try {
-      return await axios.post(`http://0.0.0.0:9001/api/auth/verifytoken`, data, {
+      return await axios.post<IUser>(`http://0.0.0.0:9001/api/auth/verifytoken`, data, {
         headers: {
           'Authorization': `Bearer ${data}`
         }
       })
         .then((response: AxiosResponse) => response.data)
         .then((data: IDataVerfigyToken) => {
-          console.log(data)
           return data
         })
     } catch (error) {
@@ -111,9 +110,9 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(registration.pending, (state) => { state.status = 'loading'; })
-      .addCase(registration.fulfilled, (state) => {
+      .addCase(registration.fulfilled, (state, { payload }) => {
         state.status = 'resolved';
-        //state.data = payload;
+        state.status = String(payload);
       })
       .addCase(registration.rejected, () => { });
     ///////
