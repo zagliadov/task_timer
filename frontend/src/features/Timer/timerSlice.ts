@@ -81,7 +81,6 @@ const timerSlice = createSlice({
     builder
       .addCase(saveTaskPackage.pending, (state) => { state.status = 'loading'; })
       .addCase(saveTaskPackage.fulfilled, (state, { payload }) => {
-        console.log(payload)
         state.status = payload as string ;
       })
       .addCase(saveTaskPackage.rejected, () => { });

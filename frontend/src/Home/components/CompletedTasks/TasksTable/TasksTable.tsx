@@ -53,7 +53,7 @@ const TasksTable: FC<ITasksProps> = ({ allCompletedTasks, setUpdate, update }) =
         )
     }
     let countTotalTime = (item: ITasks[]): void => {
-        if (!item) return
+        if (!item || item.length === 0) return
         item.forEach((task: ITasks) => {
             hour += Number(task.hours);
             minutes += Number(task.minutes);
@@ -82,7 +82,7 @@ const TasksTable: FC<ITasksProps> = ({ allCompletedTasks, setUpdate, update }) =
                 <div>CreatedAt</div>
             </div>
             <div className={task__wrapper}>
-                {allCompletedTasks.map((task: ITasks) => {
+                {(allCompletedTasks.length > 0) && allCompletedTasks.map((task: ITasks) => {
                     return (
                         <div className={task__item} key={task.id}>
                             <div className={memo}>{task.memo}

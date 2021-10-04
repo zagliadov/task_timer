@@ -28,7 +28,7 @@ const TaskTable: FC<IStartProps> = ({ start }) => {
     const tasks: ITasks | undefined | [] = useAppSelector((state: RootState) => state.tasks.tasks);
     
     useEffect(() => {
-        dispatch(getTasks(user.id))
+        dispatch(getTasks(user?.id))
     }, [dispatch, start, user])
 
     return (

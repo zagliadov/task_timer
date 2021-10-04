@@ -49,8 +49,8 @@ const CompletedTasks: FC = () => {
     }, [startDate, rawEndDate])
 
     useEffect(() => {
-        dispatch(getCompletedTasksForDays({ convertedStartDate, convertedEndDate, id: user.id }))
-    }, [update, dispatch, convertedEndDate, convertedStartDate, user.id])
+        dispatch(getCompletedTasksForDays({ convertedStartDate, convertedEndDate, id: user?.id }))
+    }, [update, dispatch, convertedEndDate, convertedStartDate, user?.id])
 
     return (
         <div className={root}>
@@ -63,7 +63,7 @@ const CompletedTasks: FC = () => {
                         <div className={wrapper_input_for_iterating_over_letters}>
                             <input type='text'
                                 className={input_for_iterating_over_letters}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch(showMatches({ data: e.target.value, convertedStartDate, convertedEndDate, id: user.id }))} />
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => dispatch(showMatches({ data: e.target.value, convertedStartDate, convertedEndDate, id: user?.id }))} />
                             <span>Display a specific tasks</span>
                         </div>
 
@@ -157,7 +157,7 @@ const CompletedTasks: FC = () => {
                 <button className={display__button}
                     onClick={(): void => {
                         setDisplayData(true)
-                        dispatch(getCompletedTasksForDays({ convertedStartDate, convertedEndDate, id: user.id }))
+                        dispatch(getCompletedTasksForDays({ convertedStartDate, convertedEndDate, id: user?.id }))
                     }}>
                     Display
                 </button>

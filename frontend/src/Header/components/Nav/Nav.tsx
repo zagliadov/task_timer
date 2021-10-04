@@ -12,7 +12,7 @@ const Nav: FC = () => {
 
     const dispatch = useAppDispatch();
     const user = useAppSelector((state: RootState) => state.user.user);
-
+    
     const {
         nav,
         link,
@@ -33,10 +33,10 @@ const Nav: FC = () => {
          */
          localStorage.clear();
     }
-
+  
     return (
         <nav className={nav}>
-            {(user.role === 'user' || user.role === 'admin') ?
+            {( user?.role === 'user' || user?.role === 'admin') ?
                 <>
                     <Link to='/' className={link}
                         onClick={(): void => {

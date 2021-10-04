@@ -14,7 +14,7 @@ const App: FC = () => {
   useEffect(() => {
     if (!localStorage.getItem('token')) return;
     dispatch(verifyToken(localStorage.getItem('token')));
-    if(Object.keys(user).length === 0) {
+    if((user !== 'undefined') || (user !== null) || Object.keys(user).length === 0) {
       dispatch(verifyToken(localStorage.getItem('token')));
     }
     if (!localStorage.getItem('hour')) return

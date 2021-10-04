@@ -134,9 +134,9 @@ const Home: FC = () => {
     }, [seconds, minutes, hours]);
 
     useEffect(() => {
-        if (typeof (user.id) === 'undefined') return
+        if (typeof(user?.id) === 'undefined') return
         dispatch(getTasks(user.id));
-    }, [dispatch, user.id, start])
+    }, [dispatch, user?.id, start])
 
     let getTime = (h: number, m: number, s: number): IGetTime => {
         //Собирает значения полей времени в обьект
