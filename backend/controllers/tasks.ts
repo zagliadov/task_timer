@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import express, { Response } from 'express';
+import express from 'express';
 import { QueryTypes } from 'sequelize';
 import { sequelize } from '../sequelize/sequelize';
 

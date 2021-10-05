@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { transformTime } from '../utils/utils';
 import axios, { AxiosResponse, AxiosTransformer } from 'axios';
 import { createHmac } from 'crypto';
@@ -118,13 +118,20 @@ const userSlice = createSlice({
     ///////
     builder
       .addCase(login.pending, (state) => { state.status = 'loading'; })
-      .addCase(login.fulfilled, (state, { payload }) => {
+      .addCase(login.fulfilled, (state, action: PayloadAction<any>) => {
 
         state.status = 'resolved';
-        if (payload === undefined) state.message = true
-        if (payload !== undefined) state.message = false
-        state.token = String(payload);
-        if (payload !== undefined) localStorage.setItem('token', String(payload))
+        if (action.payload === undefined) state.message = true;
+        if (action.payload !== undefined) state.message = false;
+        if (typeof action.payload === 'object') {
+          state.status = action.payload.message
+        }
+        if (typeof action.payload === 'string') {
+          state.token = String(action.payload);
+        }
+
+
+        if (typeof action.payload === 'string') localStorage.setItem('token', String(action.payload));
       })
       .addCase(login.rejected, () => { });
     /////

@@ -1,8 +1,16 @@
-// require('dotenv').config();
 import dotenv from 'dotenv';
 dotenv.config();
-const { Pool }: any = require('pg')
-const pool = new Pool({
+const { Pool }: any = require('pg');
+
+interface IPool {
+    user: string,
+    database: string,
+    host: string,
+    password: string,
+    port: string | number,
+    query: any
+}
+const pool: IPool = new Pool({
     user: process.env.DB_USER,
     database: 'timerDB',
     host: 'timerDB',
