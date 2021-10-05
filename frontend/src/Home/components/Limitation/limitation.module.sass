@@ -1,16 +1,28 @@
 @import '../../../colors/colors.module.sass'
 
-.option_wrapper
+.white__theme_option_wrapper
+    section
+        h2, p, span, h3, h2
+            color: $black__theme_txt
+            font-weight: 900
+.black__theme_option_wrapper
+    section
+
+        h2, p, span, h3, h2
+            font-weight: 900
+            color: $white__theme_txt
+        input[type='number']
+            color: $white__theme_txt
+            background-color: $dominantColor
+
+.white__theme_option_wrapper, .black__theme_option_wrapper
+    padding: 10px
     display: flex
     flex-direction: column
     section
         padding: 5px
         border: 1px solid $dominantColor
         border-radius: 10px
-        h2
-            color: $headerTimeLimit
-        p
-            color: $someText
 
 .danger
     color: $rejected

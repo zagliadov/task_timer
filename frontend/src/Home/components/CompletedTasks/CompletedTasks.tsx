@@ -22,14 +22,16 @@ const CompletedTasks: FC = () => {
         wrapper,
         change_date,
         input_for_iterating_over_letters,
-        root,
+        black__theme_root,
+        white__theme_root,
         dummy,
         wrapper_input_for_iterating_over_letters,
         select__other__dates_button,
     }: IClasses = classes;
 
     const allCompletedTasks = useAppSelector((state: RootState) => state.tasks.allCompletedTasks),
-        user = useAppSelector((state: RootState) => state.user.user);
+        user = useAppSelector((state: RootState) => state.user.user),
+        color = useAppSelector((state: RootState) => state.user.color);
     const dispatch = useAppDispatch();
 
     const [startDate, setStartDate] = useState<Date>(new Date()),
@@ -53,7 +55,7 @@ const CompletedTasks: FC = () => {
     }, [update, dispatch, convertedEndDate, convertedStartDate, user?.id])
 
     return (
-        <div className={root}>
+        <div className={color ? white__theme_root : black__theme_root}>
             {!displayData && <PleaseLogIn />}
 
             {displayData ? //если нажата кнопка Display выодим tasks
@@ -84,17 +86,18 @@ const CompletedTasks: FC = () => {
 
                 :
                 <section className={wrapper}>
-                    {getStartDate && <div className={dummy}>
-                        <p>
-                            Here you can see all tasks for a specific date or for a range of dates.
-                        </p>
-                        <p>
-                            The data is displayed in a table in which it is possible to delete a specific task.
-                        </p>
-                        <p>
-                            The total time spent on tasks is displayed below.
-                        </p>
-                    </div>}
+                    {getStartDate &&
+                        <div className={dummy}>
+                            <p>
+                                Here you can see all tasks for a specific date or for a range of dates.
+                            </p>
+                            <p>
+                                The data is displayed in a table in which it is possible to delete a specific task.
+                            </p>
+                            <p>
+                                The total time spent on tasks is displayed below.
+                            </p>
+                        </div>}
                     {
                         startDateDisplay ? <h2>Selected date:</h2>//Если выбрана первая дата
                             : <h2>Select date</h2>

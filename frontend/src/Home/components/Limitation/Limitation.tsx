@@ -1,9 +1,9 @@
-import {FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import classes from './limitation.module.sass';
 import { useAppSelector, useAppDispatch } from '../../../features/store';
 import { RootState } from '../../../features/store';
 import { setTimeLimit } from '../../../features/Timer/timerSlice';
-import {IClasses} from '../../../features/interfaces/interface';
+import { IClasses } from '../../../features/interfaces/interface';
 import TotalElapsedTime from './components/TotalElapsedTime/TotalElapsedTime';
 
 type ILimitationProps = {
@@ -24,16 +24,22 @@ type ITask = {
 const Limitation: FC<ILimitationProps> = ({ start }) => {
 
     const dispatch = useAppDispatch();
+    const color = useAppSelector((state: RootState) => state.user.color);
     const tasks = useAppSelector((state: RootState) => state.tasks.tasks);
     const [hasTimeFrameChanged, setHasTimeFrameChanged] = useState<boolean>(false);
-    const { danger, lite, input_timeLimit, wrapper_input_timeLimit, option_wrapper }: IClasses = classes;
+    const { danger,
+        lite,
+        input_timeLimit,
+        wrapper_input_timeLimit,
+        white__theme_option_wrapper,
+        black__theme_option_wrapper }: IClasses = classes;
     let hour: number = 0 || 1,
         minutes: number = 0 || 1,
         seconds: number = 0 || 1;
 
 
     let countTotalTime = (item: ITask[]) => {
-       if(!item) return
+        if (!item) return
         item.forEach((task: ITask) => {
             hour += Number(task.hours);
             minutes += Number(task.minutes);
@@ -60,10 +66,10 @@ const Limitation: FC<ILimitationProps> = ({ start }) => {
     useEffect(() => {
 
     }, [expdep, start, hour, timeLimit]);
-     countTotalTime(tasks);
-  
+    countTotalTime(tasks);
+
     return (
-        <div className={option_wrapper}>
+        <div className={color ? white__theme_option_wrapper : black__theme_option_wrapper}>
             <section>
                 <h2>Set a time limit?</h2>
                 <p>Set the time limit for which you want to complete the task</p>
@@ -72,19 +78,19 @@ const Limitation: FC<ILimitationProps> = ({ start }) => {
                     or stop the task execution timer
                 </p>
                 <div className={wrapper_input_timeLimit}>
-                     <input type='number'
-                    min='1' max='24'
-                    className={(input_timeLimit)}
-                    defaultValue={Number(localStorage.getItem('timeLimit')) || 3}
-                    onChange={(e) => {
-                        setHasTimeFrameChanged(!hasTimeFrameChanged);
-                        dispatch(setTimeLimit(String(e.target.value)));
-                        localStorage.setItem('timeLimit', String(e.target.value))
-                        
-                    }} />
+                    <input type='number'
+                        min='1' max='24'
+                        className={(input_timeLimit)}
+                        defaultValue={Number(localStorage.getItem('timeLimit')) || 3}
+                        onChange={(e) => {
+                            setHasTimeFrameChanged(!hasTimeFrameChanged);
+                            dispatch(setTimeLimit(String(e.target.value)));
+                            localStorage.setItem('timeLimit', String(e.target.value))
+
+                        }} />
                     <span>Enter time limit</span>
                 </div>
-               
+
                 <div>
                     <h3>This feature is under development.</h3>
                 </div>

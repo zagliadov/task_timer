@@ -69,8 +69,17 @@
     &:hover
         background-color: $buttonOnHover
 
-.root
+.black__theme_root, .white__theme_root
     position: relative
+
+.black__theme_root 
+    h2, p, div
+        color: $white__theme_txt
+        font-weight: 900
+
+.white__theme_root 
+    h2, p
+        color: $black__theme_txt
 
 .select__other__dates_button
     position: absolute
@@ -89,7 +98,7 @@
 
 .dummy
     position: absolute
-    width: 100%
+    width: 95%
     font-size: 20px
     padding: 70px 10px 0px 10px 
 

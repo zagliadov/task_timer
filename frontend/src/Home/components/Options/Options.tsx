@@ -4,6 +4,7 @@ import TaskTable from '../TaskTable/TaskTable';
 import CompletedTasks from '../CompletedTasks/CompletedTasks';
 import { Link, Switch, Route, useLocation } from 'react-router-dom';
 import classes from './options.module.sass';
+import { useAppSelector, RootState } from '../../../features/store';
 import { useTransition, animated } from 'react-spring'
 import { IClasses } from '../../../features/interfaces/interface';
 
@@ -20,7 +21,11 @@ type IOptionLocation = {
 
 const Options: FC<IOptionProps> = ({ start }) => {
 
-    const { options_wrapper, link }: IClasses = classes;
+    const {
+        white__theme_options_wrapper,
+        link,
+        black__theme_option_wrapper }: IClasses = classes;
+    const color = useAppSelector((state: RootState) => state.user.color);
     const location = useLocation<IOptionLocation>();
     const transition = useTransition(location, {
         from: {
@@ -35,7 +40,7 @@ const Options: FC<IOptionProps> = ({ start }) => {
     });
 
     return (
-        <section className={options_wrapper} style={{ position: 'relative' }}>
+        <section className={color ? black__theme_option_wrapper : white__theme_options_wrapper} style={{ position: 'relative' }}>
             <h2>Options</h2>
             <menu>
                 <Link to='/limitations' className={link} >Time limit</Link>

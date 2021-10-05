@@ -19,6 +19,7 @@ interface IUserState {
   user: IUser,
   status: string,
   token: string,
+  color: boolean,
   message: boolean,
 }
 
@@ -26,6 +27,7 @@ const initialState: IUserState = {
   user: {},
   status: '',
   token: '',
+  color: JSON.parse(localStorage.getItem('color') as string),
   message: false,
 }
 
@@ -104,6 +106,10 @@ const userSlice = createSlice({
     },
     tokenRemove(state, action) {
       state.token = action.payload;
+    },
+    setColor(state, action) {
+      state.color = action.payload;
+      localStorage.setItem('color', String(action.payload));
     }
   },
 
@@ -145,7 +151,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { userRemove, tokenRemove } = userSlice.actions;
+export const { userRemove, tokenRemove, setColor } = userSlice.actions;
 
 
 
