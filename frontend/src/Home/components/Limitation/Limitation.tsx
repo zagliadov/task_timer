@@ -33,9 +33,9 @@ const Limitation: FC<ILimitationProps> = ({ start }) => {
         wrapper_input_timeLimit,
         white__theme_option_wrapper,
         black__theme_option_wrapper }: IClasses = classes;
-    let hour: number = 0 || 1,
-        minutes: number = 0 || 1,
-        seconds: number = 0 || 1;
+    let hour: number = 0,
+        minutes: number = 0,
+        seconds: number = 0;
 
 
     let countTotalTime = (item: ITask[]) => {
