@@ -7,6 +7,8 @@ import classes from './options.module.sass';
 import { useAppSelector, RootState } from '../../../features/store';
 import { useTransition, animated } from 'react-spring'
 import { IClasses } from '../../../features/interfaces/interface';
+import Payment from '../Payment/Payment';
+
 
 type IOptionProps = {
     start: boolean,
@@ -61,6 +63,9 @@ const Options: FC<IOptionProps> = ({ start }) => {
                                 </Route>
                                 <Route path="/completedtasks">
                                     <CompletedTasks />
+                                </Route>
+                                <Route path="/payment">
+                                    <Payment />
                                 </Route>
                             </Switch>
                         </div>

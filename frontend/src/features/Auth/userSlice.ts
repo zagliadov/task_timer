@@ -1,9 +1,11 @@
+import dotenv from 'dotenv';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { transformTime } from '../utils/utils';
 import axios, { AxiosResponse, AxiosTransformer } from 'axios';
 import { createHmac } from 'crypto';
 import { IRegistration } from '../interfaces/interface';
 
+dotenv.config();
 
 interface IUser {
   id?: number;
@@ -31,6 +33,20 @@ const initialState: IUserState = {
   message: false,
 }
 
+export const payment = createAsyncThunk(
+  'user/payment',
+  async (data: any) => {
+    console.log(data);
+    try {
+      // return await axios.post<any>(`${process.env.SHOST || ''}/api/payment/create-payment-intent`, data)
+      //   .then((response: AxiosResponse) => response.data)
+      //   .then((data: { message: string }) => data.message)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+)
+
 export const registration = createAsyncThunk(
   'user/registration',
   async (data: IRegistration) => {
@@ -39,7 +55,7 @@ export const registration = createAsyncThunk(
     data.password = await createHmac('sha256', data.password).update('pass').digest('hex');
     data.role = 'user';
     try {
-      return await axios.post<string>(`http://0.0.0.0:9001/api/auth/registration`, data)
+      return await axios.post<string>(`${process.env.SHOST || ''}/api/auth/registration`, data)
         .then((response: AxiosResponse) => response.data)
         .then((data: { message: string }) => data.message)
     } catch (error) {
@@ -62,7 +78,7 @@ export const login = createAsyncThunk(
   async (data: ILogin) => {
     data.password = await createHmac('sha256', data.password).update('pass').digest('hex');
     try {
-      return await axios.post<string>(`http://0.0.0.0:9001/api/auth/login`, data)
+      return await axios.post<string>(`${process.env.SHOST || ''}/api/auth/login`, data)
         .then((response: AxiosResponse) => response.data)
         .then((data: IDataLogin) => {
           if (!data) return
@@ -82,7 +98,7 @@ export const verifyToken = createAsyncThunk(
   'user/verifyToken',
   async (data: string | null) => {
     try {
-      return await axios.post<IUser>(`http://0.0.0.0:9001/api/auth/verifytoken`, data, {
+      return await axios.post<IUser>(`${process.env.SHOST || ''}/api/auth/verifytoken`, data, {
         headers: {
           'Authorization': `Bearer ${data}`
         }
@@ -148,8 +164,16 @@ const userSlice = createSlice({
         state.user = payload as IUser;
       })
       .addCase(verifyToken.rejected, () => { });
+    ////
+    builder
+      .addCase(payment.pending, (state) => { state.status = 'loading'; })
+      .addCase(payment.fulfilled, () => {
+        // state.status = 'resolved';
+        // state.user = payload as IUser;
+      })
+      .addCase(payment.rejected, () => { });
   },
-});
+}); 
 
 export const { userRemove, tokenRemove, setColor } = userSlice.actions;
 

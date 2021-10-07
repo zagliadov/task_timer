@@ -1,5 +1,5 @@
 @import '../colors/colors.module.sass'
-    
+
 .white_wrapper, .black_wrapper
     display: flex
     flex-direction: column
@@ -11,7 +11,7 @@
     padding-bottom: 50px
     padding-left: 10px
     padding-right: 10px
-    
+
 .white_wrapper
     margin-top: 5px
     border: 1px solid $dominantColor
@@ -20,4 +20,10 @@
 .black_wrapper
     border: 1px solid $dominantColor
     background-color: $black__theme_bgc
-    
+
+@media screen and (max-width: 667px)
+    .white_wrapper, .black_wrapper
+        width: 100%
+        margin: 0
+        padding: 0
+        height: calc(100vh + 200px)

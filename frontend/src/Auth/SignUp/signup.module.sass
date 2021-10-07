@@ -1,6 +1,5 @@
 @import '../../colors/colors.module.sass';
 
-
 .wrapper
     display: flex
     align-items: center
@@ -45,3 +44,10 @@
         background-color: $buttonAtRest
         &:hover
             background-color: $buttonOnHover
+
+
+@media screen and (max-width: 667px) 
+    .wrapper
+        width: 100%
+        input
+            width: 60%

@@ -8,12 +8,17 @@ import { sequelize } from './sequelize/sequelize';
 app.use(cors());
 app.use(express.json());
 
+
 app.use('/api/timer', require('./routes/timer.ts'));
 app.use('/api/auth', require('./routes/auth.ts'));
 app.use('/api/tasks', require('./routes/tasks.ts'));
+app.use('/api/payment', require('./routes/payment.ts'));
+
+
 
 sequelize.sync().then(() => {
     app.listen(PORT, async (): Promise<void> => {
         console.log(`Server run on: ${PORT}`)
     })
 })
+

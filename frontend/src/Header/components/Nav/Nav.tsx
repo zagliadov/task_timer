@@ -43,6 +43,9 @@ const Nav: FC = () => {
                             clean()
                         }}
                     >Sign Out</Link>
+                    <Link to='/payment' className={link}
+                        
+                    >Payment</Link>
                 </>
                 :
                 <>

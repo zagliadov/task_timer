@@ -7,12 +7,13 @@ import { verifyToken } from '../features/Auth/userSlice';
 import classes from './app.module.sass';
 import { IClasses } from '../features/interfaces/interface';
 
+
 const App: FC = () => {
 
   const dispatch = useAppDispatch();
   const user = useAppSelector((state: RootState) => state.user.user),
     color = useAppSelector((state: RootState) => state.user.color);
-  
+
   const { black__theme, white__theme }: IClasses = classes;
 
   useEffect(() => {
@@ -23,7 +24,6 @@ const App: FC = () => {
     }
     if (!localStorage.getItem('hour')) return
     localStorage.removeItem('hour');
-
     return () => {
       console.log('Unmount app');
     }
@@ -38,7 +38,6 @@ const App: FC = () => {
         <Main />
       </Wrapper>
     </div>
-
   );
 };
 
