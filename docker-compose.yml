@@ -23,6 +23,7 @@ services:
     volumes:
       - ./backend:/app
     command: npm run start:dev
+  
     
   timerDB:
     image: postgres:latest

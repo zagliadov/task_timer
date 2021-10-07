@@ -1,18 +1,24 @@
-@import '../../../colors/colors.module.sass';
-    
-.options_wrapper
+@import '../../../colors/colors.module.sass'
+
+.white__theme_options_wrapper
+    h2
+        color: $white__theme_txt
+
+.black__theme_option_wrapper
+    h2
+        color: $black__theme_txt
+
+.white__theme_options_wrapper, .black__theme_option_wrapper
     display: flex
     flex-direction: column
     width: 100%
     position: relative
-    // padding: 10px
     menu
         display: flex
-        // padding: 10px 0
     h2
-        color: $someText
         margin: 0
         padding-top: 10px
+        padding-left: 20px
 .link
     text-decoration: none
     font-size: 20px
@@ -41,3 +47,25 @@
             color: $linkOnHover
             border-bottom: 2px solid $linkOnHover
             transition: all 0.2s
+
+@media screen and (max-width: 667px)
+
+    .white__theme_options_wrapper, .black__theme_option_wrapper
+        h2
+            font-size: 20px
+            margin: 0
+            padding-top: 5px
+            padding-left: 5px
+        menu
+            padding: 0
+            margin: 0
+            
+    .link
+        font-size: 17px
+        padding-bottom: 5px
+        padding-right: 5px
+        padding-left: 20px
+        &:nth-child(1)
+            padding: 0px 0px 0px 10px
+            margin: 0
+            width: auto

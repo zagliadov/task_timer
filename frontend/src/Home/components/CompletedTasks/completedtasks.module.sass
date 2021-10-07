@@ -9,7 +9,6 @@
         left: 0px
         margin: 0
 
-
 .input__wrapper
     width: 100%
     height: auto
@@ -69,8 +68,17 @@
     &:hover
         background-color: $buttonOnHover
 
-.root
+.black__theme_root, .white__theme_root
     position: relative
+
+.black__theme_root
+    h2, p, div
+        color: $white__theme_txt
+        font-weight: 900
+
+.white__theme_root
+    h2, p
+        color: $black__theme_txt
 
 .select__other__dates_button
     position: absolute
@@ -86,12 +94,11 @@
     &:hover
         background-color: $buttonOnHover
 
-
 .dummy
     position: absolute
-    width: 100%
+    width: 95%
     font-size: 20px
-    padding: 70px 10px 0px 10px 
+    padding: 70px 10px 0px 10px
 
 .input_for_iterating_over_letters
     font-size: 18px
@@ -100,3 +107,50 @@
 .wrapper_input_for_iterating_over_letters
     display: flex
     flex-direction: column
+
+@media screen and (max-width: 667px)
+    .dummy
+        font-size: 15px
+        padding: 50px 10px 0px 10px
+
+    .date__picker_start, .date__picker_end
+        top: -15px
+        right: 170px
+        width: 50px
+        height: 50px
+        &:hover
+            top: -25px
+            right: 170px
+            width: 70px
+            height: 70px
+
+    .change_date
+        top: 40px
+        left: 30px
+        width: 130px
+        height: 40px
+        font-size: 15px
+
+    .date__display
+        bottom: -50px
+        left: 200px
+        width: 180px
+
+    .select__other__dates_button
+        top: 13px
+        right: 5px
+        width: 140px
+        height: 40px
+        font-size: 15px
+
+    .input_for_iterating_over_letters
+        font-size: 18px
+        width: 160px
+        margin-left: 15px
+
+    .display__button
+        bottom: -145px
+        right: 51px
+        width: 130px
+        font-size: 15px
+    
