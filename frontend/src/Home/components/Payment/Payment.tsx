@@ -1,69 +1,53 @@
-import { FC } from 'react';
-import classes from './payment.module.sass';
-import { IClasses } from '../../../features/interfaces/interface';
-import { useAppSelector, RootState, useAppDispatch } from '../../../features/store';
-import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { FC} from 'react';
+import './payment.sass';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
+import { useAppDispatch, useAppSelector, RootState } from '../../../features/store';
 import { payment } from '../../../features/Auth/userSlice';
+
+const checkoutFormOptions = {
+    style: {
+        base: {
+            fontSize: '16px',
+            color: '#424770',
+        },
+        invalid: {
+            color: '#9e2146',
+        },
+    },
+    hidePostalCode: true,
+}
 
 const Payment: FC = () => {
 
-    const {
-        black__theme_payment,
-        white__theme_payment,
-    }: IClasses = classes;
-    const stripe = useStripe();
-    const elements = useElements();
-    // const [succeeded, setSucceeded] = useState(false);
-    // const [error, setError] = useState(null);
-    // const [processing, setProcessing] = useState('');
-    // const [disabled, setDisabled] = useState(true);
-    // const [clientSecret, setClientSecret] = useState('');
+    const stripe: any = useStripe(),
+        elements: any = useElements(),
+        dispatch = useAppDispatch(),
+        paymentStatus = useAppSelector((state: RootState) => state.user.paymentStatus);
 
-    const color = useAppSelector((state: RootState) => state.user.color);
-    const dispatch = useAppDispatch();
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
 
-    const checkoutFormOptions = {
-        hidePostalCode: true,
-        style: {
-            base: {
-                fontSize: '16px',
-                color: '#424770',
-                '::placeholder': {
-                    color: '#aab7c4',
-                },
-            },
-            invalid: {
-                color: '#9e2146',
-            },
-        },
+        const { error, paymentMethod }: any = await stripe.createPaymentMethod({
+            type: 'card',
+            card: elements.getElement(CardElement),
+        });
+        if (!error) {
+            const { id } = paymentMethod;
+            dispatch(payment({ id, amount: 1000 }));
+        }
+
     }
-    const handleChange = async (event: any) => {
-        // Listen for changes in the CardElement
-        // and display any errors as the customer types their card details
-        // setDisabled(event.empty);
-        // setError(event.error ? event.error.message : "");
-        console.log(event)
-    };
-    const handleSubmit = async (event: any) => {
-        event.preventDefault();
-        if (!stripe || !elements) return
-        dispatch(payment(event))
-    }
-
 
     return (
-        <div className={color ? white__theme_payment : black__theme_payment}>
-
-
+        <>
             <form onSubmit={handleSubmit}>
-                <CardElement onChange={handleChange}
-                    options={checkoutFormOptions} id="card-element" />
-                <button type="submit" disabled={!stripe} id="submit">
-                    Pay
-                </button>
+                <CardElement options={checkoutFormOptions} />
+                <input type='submit' defaultValue='Pay' />
             </form>
-        </div>
-    );
+            <p>{paymentStatus}</p>
+        </>
+
+    )
 };
 
 export default Payment;

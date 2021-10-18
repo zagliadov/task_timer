@@ -8,7 +8,7 @@ const {
 
 
 
-router.route('/create-payment-intent')
+router.route('/payment')
     .post(payment);
 
 
