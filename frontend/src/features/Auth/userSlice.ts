@@ -23,6 +23,7 @@ interface IUserState {
   token: string,
   color: boolean,
   message: boolean,
+  paymentStatus: string,
 }
 
 const initialState: IUserState = {
@@ -31,16 +32,24 @@ const initialState: IUserState = {
   token: '',
   color: JSON.parse(localStorage.getItem('color') as string),
   message: false,
+  paymentStatus: '',
 }
 
+interface IPayment {
+  status?: string
+}
 export const payment = createAsyncThunk(
   'user/payment',
   async (data: any) => {
-    console.log(data);
     try {
-      // return await axios.post<any>(`${process.env.SHOST || ''}/api/payment/create-payment-intent`, data)
-      //   .then((response: AxiosResponse) => response.data)
-      //   .then((data: { message: string }) => data.message)
+      return await axios.post<any>(`${process.env.SHOST || ''}/api/payment/payment`, data)
+        .then((response: AxiosResponse) => response.data)
+        .then((data: IPayment) => {
+          console.log(data);
+          return data.status;
+        })
+
+
     } catch (error) {
       console.log(error)
     }
@@ -166,14 +175,13 @@ const userSlice = createSlice({
       .addCase(verifyToken.rejected, () => { });
     ////
     builder
-      .addCase(payment.pending, (state) => { state.status = 'loading'; })
-      .addCase(payment.fulfilled, () => {
-        // state.status = 'resolved';
-        // state.user = payload as IUser;
+      .addCase(payment.pending, (state) => { state.paymentStatus = 'loading'; })
+      .addCase(payment.fulfilled, (state, { payload }) => {
+        state.paymentStatus = String(payload);
       })
       .addCase(payment.rejected, () => { });
   },
-}); 
+});
 
 export const { userRemove, tokenRemove, setColor } = userSlice.actions;
 
