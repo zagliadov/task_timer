@@ -19,13 +19,14 @@ export const getTasks = async (req: express.Request, res: express.Response): Pro
 
     try {
         if (typeof (id) === "undefined") return
-        const tasks: IGetTasks[] = await sequelize.query(`
+        const tasks: IGetTasks[] | any= await sequelize.query(`
         SELECT firstname, memo, "userId", "Tasks".id, "Tasks"."createdAt", "Tasks".hours, "Tasks".minutes, "Tasks".seconds  FROM "Users"
             JOIN "Tasks"
                 ON "Users".id = "Tasks"."userId"
             WHERE "Users".id = ${id} AND "Tasks"."createdAt" = '${date}'
-           `, { type: QueryTypes.SELECT })
-        res.status(200).json(tasks)
+           `)
+           console.log(tasks[0])
+        res.status(200).json(tasks[0])
 
     } catch (error) {
         console.log(error)
@@ -37,7 +38,6 @@ export const getCompletedTasksForDays = async (req: express.Request, res: expres
     const convertedStartDate: string = req.body.convertedStartDate,
         convertedEndDate: string = req.body.convertedEndDate,
         id: string = req.body.id;
-
     try {
         if (typeof (id) === "undefined") return
         const tasks: IGetCompletedTasksForDays[] = await sequelize.query(`

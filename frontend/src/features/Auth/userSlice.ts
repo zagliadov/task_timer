@@ -55,7 +55,7 @@ export const registration = createAsyncThunk(
     data.password = await createHmac('sha256', data.password).update('pass').digest('hex');
     data.role = 'user';
     try {
-      return await axios.post<string>(`${process.env.SHOST || ''}/api/auth/registration`, data)
+      return await axios.post<string>(`http://0.0.0.0:9001/api/auth/registration`, data)
         .then((response: AxiosResponse) => response.data)
         .then((data: { message: string }) => data.message)
     } catch (error) {
@@ -78,7 +78,7 @@ export const login = createAsyncThunk(
   async (data: ILogin) => {
     data.password = await createHmac('sha256', data.password).update('pass').digest('hex');
     try {
-      return await axios.post<string>(`${process.env.SHOST || ''}/api/auth/login`, data)
+      return await axios.post<string>(`http://0.0.0.0:9001/api/auth/login`, data)
         .then((response: AxiosResponse) => response.data)
         .then((data: IDataLogin) => {
           if (!data) return
@@ -98,7 +98,7 @@ export const verifyToken = createAsyncThunk(
   'user/verifyToken',
   async (data: string | null) => {
     try {
-      return await axios.post<IUser>(`${process.env.SHOST || ''}/api/auth/verifytoken`, data, {
+      return await axios.post<IUser>(`http://0.0.0.0:9001/api/auth/verifytoken`, data, {
         headers: {
           'Authorization': `Bearer ${data}`
         }

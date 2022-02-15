@@ -4,6 +4,7 @@ import { RootState } from '../features/store';
 import classes from './home.module.sass';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { saveTaskPackage, updateTime } from '../features/Timer/timerSlice';
 import { getTasks } from '../features/Tasks/tasksSlice';
 import Options from './components/Options/Options';
@@ -270,13 +271,13 @@ const Home: FC = () => {
 
                         <section className={timer_button}>
                             {!start ?
-                                <FontAwesomeIcon icon={faPlay}
+                                <FontAwesomeIcon icon={faPlay as IconProp}
                                     className={timer_icons_play}
                                     onClick={(): void => {
                                         handlePlay()
                                     }} />
                                 :
-                                <FontAwesomeIcon icon={faPause}
+                                <FontAwesomeIcon icon={faPause as IconProp}
                                     className={timer_icons_pause}
                                     onClick={(): void => {
                                         handlePause()

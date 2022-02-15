@@ -7,6 +7,7 @@ import { useHistory } from 'react-router';
 import { IClasses } from '../../features/interfaces/interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const SignIn: FC = () => {
 
@@ -29,7 +30,7 @@ const SignIn: FC = () => {
         input__wrapper_submit,
     }: IClasses = classes;
 
-    const onSubmit = (data: ILogin): void => {
+    const onSubmit = (data: ILogin | any): void => {
         dispatch(login(data));
     };
     useEffect(() => {
@@ -60,11 +61,11 @@ const SignIn: FC = () => {
                 </section>
                 <div className={password}>
                     {(inputType === 'password') ?
-                        <FontAwesomeIcon icon={faEyeSlash} onClick={() => {
+                        <FontAwesomeIcon icon={faEyeSlash as IconProp} onClick={() => {
                             handleChangeInputTypeOnText();
                         }} />
                         :
-                        <FontAwesomeIcon icon={faEye} onClick={() => {
+                        <FontAwesomeIcon icon={faEye as IconProp} onClick={() => {
                             handleChangeInputTypeOnPassword();
                         }} />
                     }

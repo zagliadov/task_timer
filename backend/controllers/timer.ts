@@ -12,12 +12,13 @@ interface ITimeStampSaveTaskPackage {
 
 export const saveTaskPackage = async (req: express.Request, res: express.Response): Promise<void> => {
     const { hours, minutes, seconds, memo }: ITimeStampSaveTaskPackage = req.body.timeStamp;
+    console.log(req.body)
     const id: string = req.body.id;
     const date: Date = req.body.date;
     try {
         await sequelize.query(`
-            INSERT INTO "Tasks"(hours, minutes, seconds, memo, "userId", picture, "createdAt")
-                VALUES('${hours}','${minutes}', '${seconds}', '${memo}', '${id}', '{}', '${date}')
+            INSERT INTO "Tasks"(hours, minutes, seconds, memo, "userId", picture, "createdAt", "updatedAt")
+                VALUES('${hours}','${minutes}', '${seconds}', '${memo}', '${id}', '{}', '${date}', '${date}')
            `)
         res.status(201).json({ message: 'resolved' });
     } catch (error) {

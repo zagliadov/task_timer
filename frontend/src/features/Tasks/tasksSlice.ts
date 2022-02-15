@@ -31,8 +31,8 @@ export const getTasks = createAsyncThunk(
   async (id: number | undefined) => {
     if (typeof id === 'undefined') return
     try {
-      return await axios.get<ITodayTasks>(`${process.env.SHOST || ''}/api/tasks/get_tasks/${id}`)
-        .then((response: AxiosResponse) => response.data)
+      return await axios.get<ITodayTasks>(`http://0.0.0.0:9001/api/tasks/get_tasks/${id}`)
+        .then((response: any) => response.data)
         .then((data: ITodayTasks) => data)
 
     } catch (error) {
@@ -50,7 +50,7 @@ export const getCompletedTasksForDays = createAsyncThunk(
   'tasks/getCompletedTasksForDays',
   async (data: IGetCompletedTasksForDays) => {
     try {
-      return await axios.post<IGetCompletedTasksForDays>(`${process.env.SHOST || ''}/api/tasks/get_completed_tasks`, data)
+      return await axios.post<IGetCompletedTasksForDays>(`http://0.0.0.0:9001/api/tasks/get_completed_tasks`, data)
         .then((response: AxiosResponse) => response.data)
         .then((data: IGetCompletedTasksForDays[]) => {
           return data
@@ -70,7 +70,7 @@ export const removeTask = createAsyncThunk(
     try {
       if(typeof data === 'undefined') return
 
-      return await axios.delete<any>(`${process.env.SHOST || ''}/api/tasks/remove_task`, { data })
+      return await axios.delete<any>(`http://0.0.0.0:9001/api/tasks/remove_task`, { data })
         .then((response: AxiosResponse) => response.data)
         .then((data: {message: string}) => data.message)
 
@@ -99,7 +99,7 @@ export const showMatches = createAsyncThunk(
   'tasks/showMatches',
   async (data: IDataShowMessageFromClient) => {
     try {
-      return await axios.post<AxiosInstance>(`${process.env.SHOST || ''}/api/tasks/show_matches`, { data })
+      return await axios.post<AxiosInstance>(`http://0.0.0.0:9001/api/tasks/show_matches`, { data })
         .then((response: AxiosResponse) => response.data)
         .then((data: IDataShowMessageFromDB[]) => data)
 

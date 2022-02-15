@@ -42,7 +42,7 @@ export const saveTaskPackage = createAsyncThunk(
     let newDate: Date = new Date();
     data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime((newDate.getMonth() + 1).toString())}-${transformTime(newDate.getDate().toString())}`
     try {
-      return await axios.post(`${process.env.SHOST || ''}/api/timer/add_task`, data)
+      return await axios.post(`http://0.0.0.0:9001/api/timer/add_task`, data)
         .then((response: AxiosResponse) => response.data)
         .then((data: {message: string}) => data.message)
     } catch (error) {
@@ -57,7 +57,7 @@ export const updateTime = createAsyncThunk(
     try {
       let newDate: Date = new Date();
       data.date = `${transformTime(newDate.getFullYear().toString())}-${transformTime((newDate.getMonth() + 1).toString())}-${transformTime(newDate.getDate().toString())}`
-      return await axios.put(`${process.env.SHOST || ''}/api/timer/update_time`, data)
+      return await axios.put(`http://0.0.0.0:9001/api/timer/update_time`, data)
         .then((response: AxiosResponse) => response.data)
         .then((data: {message: string}) => data.message)
     } catch (error) {

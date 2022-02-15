@@ -20,7 +20,7 @@ const SignUp: FC = () => {
         input__wrapper_submit,
     }: IClasses = classes;
 
-    const onSubmit = (data: IRegistration): void => {
+    const onSubmit = (data: IRegistration | any): void => {
         dispatch(registration(data));
         setTimeout(() => {
             history.push('/signin')
